@@ -16,6 +16,16 @@
 }(this, function() {
 
     /* begin helpers */
+    function arrayBufferEquals(b1, b2) {
+        if (b1.byteLength !== b2.byteLength) return false;
+        b1 = new Uint8Array(b1);
+        b2 = new Uint8Array(b2);
+        for (let i = 0; i < b1.byteLength; i++) {
+            if (b1[i] !== b2[i]) return false;
+        }
+        return true;
+    }
+
     function hex2ab(hex) {
         if (typeof hex !== 'string') {
             throw new TypeError('Expected input to be a string');
@@ -118,13 +128,13 @@
 
     var challengeStr = "abc123def456";
     var challengeBuf = str2ab(challengeStr);
-    var clientDataJson = '{"challenge":"' + b64encode(challengeBuf) + '","origin":"http://localhost","hashAlg":"S256"}';
+    var clientDataJson = '{"challenge":"' + b64encode(challengeBuf) + '","origin":"http://localhost:9999","hashAlg":"S256"}';
     var clientData = JSON.parse(clientDataJson);
     // hashes can be generated with: http://www.xorbin.com/tools/sha256-hash-calculator
     var rpIdHashHex = "49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d9763";
     var clientDataJsonBuf = str2ab(clientDataJson);
     var clientDataBase64 = b64encode(clientDataJsonBuf);
-    var clientDataHashHex = "6efe74db7e637a874c3bc141c2cd2e05c9f4db2b616e591e3fa19c73fa996a16";
+    var clientDataHashHex = "8f5e036f15c71efda91f28d208d78e606450005f94bb657f1566f71d007be73a";
     var packedSelfAttestation = new Uint8Array([
         0xA3,                                                                                                       // map(3)
             0x63,                                                                                                   // key(3)
@@ -282,6 +292,7 @@
          */
         authenticatorData: [],
 
+        arrayBufferEquals: arrayBufferEquals,
         hex2ab: hex2ab,
         str2ab: str2ab,
         ab2str: ab2str,
