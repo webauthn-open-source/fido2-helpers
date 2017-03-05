@@ -16,7 +16,7 @@
 }(this, function() {
 
     /* begin helpers */
-    function hexToArrayBuffer(hex) {
+    function hex2ab(hex) {
         if (typeof hex !== 'string') {
             throw new TypeError('Expected input to be a string');
         }
@@ -33,16 +33,98 @@
 
         return view.buffer;
     }
+
+    function str2ab(str) {
+        var buf = new ArrayBuffer(str.length);
+        var bufView = new Uint8Array(buf);
+        for (var i = 0, strLen = str.length; i < strLen; i++) {
+            bufView[i] = str.charCodeAt(i);
+        }
+        return buf;
+    }
+
+    // borrowed from:
+    // https://github.com/niklasvh/base64-arraybuffer/blob/master/lib/base64-arraybuffer.js
+    // modified to base64url by Yuriy :)
+    /*
+     * base64-arraybuffer
+     * https://github.com/niklasvh/base64-arraybuffer
+     *
+     * Copyright (c) 2012 Niklas von Hertzen
+     * Licensed under the MIT license.
+     */
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+    // Use a lookup table to find the index.
+    var lookup = new Uint8Array(256);
+    for (var i = 0; i < chars.length; i++) {
+        lookup[chars.charCodeAt(i)] = i;
+    }
+
+    function b64decode(base64) {
+        var bufferLength = base64.length * 0.75,
+            len = base64.length,
+            i, p = 0,
+            encoded1, encoded2, encoded3, encoded4;
+
+        if (base64[base64.length - 1] === "=") {
+            bufferLength--;
+            if (base64[base64.length - 2] === "=") {
+                bufferLength--;
+            }
+        }
+
+        var arraybuffer = new ArrayBuffer(bufferLength),
+            bytes = new Uint8Array(arraybuffer);
+
+        for (i = 0; i < len; i += 4) {
+            encoded1 = lookup[base64.charCodeAt(i)];
+            encoded2 = lookup[base64.charCodeAt(i + 1)];
+            encoded3 = lookup[base64.charCodeAt(i + 2)];
+            encoded4 = lookup[base64.charCodeAt(i + 3)];
+
+            bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
+            bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
+            bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
+        }
+
+        return arraybuffer;
+    }
+
+    function b64encode(arraybuffer) {
+        var bytes = new Uint8Array(arraybuffer),
+            i, len = bytes.length,
+            base64 = "";
+
+        for (i = 0; i < len; i += 3) {
+            base64 += chars[bytes[i] >> 2];
+            base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
+            base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
+            base64 += chars[bytes[i + 2] & 63];
+        }
+
+        if ((len % 3) === 2) {
+            base64 = base64.substring(0, base64.length - 1) + "=";
+        } else if (len % 3 === 1) {
+            base64 = base64.substring(0, base64.length - 2) + "==";
+        }
+
+        return base64;
+    }
+
+    function ab2str(buf) {
+        return String.fromCharCode.apply(null, new Uint16Array(buf));
+    }
+
+    var challengeStr = "abc123def456";
+    var challengeBuf = str2ab(challengeStr);
+    var clientDataJson = '{"challenge":"' + b64encode(challengeBuf) + '","origin":"http://localhost","hashAlg":"S256"}';
+    var clientData = JSON.parse(clientDataJson);
+    // hashes can be generated with: http://www.xorbin.com/tools/sha256-hash-calculator
     var rpIdHashHex = "49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d9763";
-    var clientDataBase64 = "ew0KImNoYWxsZW5nZSI6ICJhYmMxMjNkZWY0NTYiLA0KIm9yaWdpbiI6ICJsb2NhbGhvc3QiLA0KImhhc2hBbGciOiAiUzI1NiINCn0=";
-    var clientDataJsonBuf = new Uint8Array([
-        0x7b, 0x0d, 0x0a, 0x22, 0x63, 0x68, 0x61, 0x6c, 0x6c, 0x65, 0x6e, 0x67, 0x65, 0x22, 0x3a, 0x20,
-        0x22, 0x61, 0x62, 0x63, 0x31, 0x32, 0x33, 0x64, 0x65, 0x66, 0x34, 0x35, 0x36, 0x22, 0x2c, 0x0d,
-        0x0a, 0x22, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x22, 0x3a, 0x20, 0x22, 0x6c, 0x6f, 0x63, 0x61,
-        0x6c, 0x68, 0x6f, 0x73, 0x74, 0x22, 0x2c, 0x0d, 0x0a, 0x22, 0x68, 0x61, 0x73, 0x68, 0x41, 0x6c,
-        0x67, 0x22, 0x3a, 0x20, 0x22, 0x53, 0x32, 0x35, 0x36, 0x22, 0x0d, 0x0a, 0x7d
-    ]).buffer;
-    var clientDataHashHex = "7CA8E7527A68F3034FB8D380C8726BCDE8EF25B8610996CC492EB7AA7B42DB44";
+    var clientDataJsonBuf = str2ab(clientDataJson);
+    var clientDataBase64 = b64encode(clientDataJsonBuf);
+    var clientDataHashHex = "6efe74db7e637a874c3bc141c2cd2e05c9f4db2b616e591e3fa19c73fa996a16";
     var packedSelfAttestation = new Uint8Array([
         0xA3,                                                                                                       // map(3)
             0x63,                                                                                                   // key(3)
@@ -126,9 +208,7 @@
          * a challenge for makeCredential or getAttestation
          * @type {ArrayBuffer}
          */
-        challenge: new ArrayBuffer([
-            0x61, 0x62, 0x63, 0x31, 0x32, 0x33, 0x64, 0x65, 0x66, 0x34, 0x35, 0x36
-        ]),
+        challenge: (Uint8Array.from(challengeStr.split("").map(function(ch) {return ch.charCodeAt(0)}))).buffer,
 
         /**
          * the string version of `challenge`
@@ -167,36 +247,21 @@
          * @type {Object}
          * @see https://www.w3.org/TR/webauthn/#sec-client-data
          */
-        clientData: {
-            challenge: "abc123def456",
-            origin: "localhost",
-            hashAlg: "S256",
-            // tokenBinding: "",
-            // extensions: {}
-        },
+        clientData: clientData,
 
         /**
          * The example clientData, encoded as base64 JSON
          * @type {String}
          */
         clientDataBase64: clientDataBase64,
-        // {
-        // "challenge": "abc123def456",
-        // "origin": "localhost",
-        // "hashAlg": "S256"
-        // }
+        clientDataJsonBuf: clientDataJsonBuf,
 
         /**
          * A SHA256 hash of the example clientDataBase64, encoded as a hex string
          * @type {String}
          */
         clientDataHashHex: clientDataHashHex,
-
-        // clientDataHash: "42d3fc09b8448e7c3ef0e942d5410abe7b6122b095b54035f90aca467814e972",
-        clientDataHash: (Uint8Array.from(clientDataHashHex.match(/.{2}/g), function(hex) {
-            return parseInt(hex, 16);
-        })).buffer,
-        clientDataJsonBuf: clientDataJsonBuf,
+        clientDataHash: hex2ab(clientDataHashHex),
         /**
          * the default relying party ID
          * @type {String}
@@ -208,7 +273,7 @@
          * @type {String}
          */
         rpIdHashHex: rpIdHashHex,
-        rpIdHash: hexToArrayBuffer(rpIdHashHex),
+        rpIdHash: hex2ab(rpIdHashHex),
         packedSelfAttestation: packedSelfAttestation,
         /**
          * Typical authenticator data
@@ -217,7 +282,11 @@
          */
         authenticatorData: [],
 
-        hexToArrayBuffer: hexToArrayBuffer,
+        hex2ab: hex2ab,
+        str2ab: str2ab,
+        ab2str: ab2str,
+        b64decode: b64decode,
+        b64encode: b64encode
     };
 })); /* end AMD module */
 
