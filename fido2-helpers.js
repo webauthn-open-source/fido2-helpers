@@ -15,8 +15,59 @@
     // the return value of this function is what becomes the AMD / CommonJS / Global export
 }(this, function() {
 
+    /********************************************************************************
+     *********************************************************************************
+     * FUNCTIONS
+     *********************************************************************************
+     *********************************************************************************/
+
     /* begin helpers */
+    function printHex(msg, buf) {
+        // if the buffer was a TypedArray (e.g. Uint8Array), grab its buffer and use that
+        if (ArrayBuffer.isView(buf) && buf.buffer instanceof ArrayBuffer) {
+            buf = buf.buffer;
+        }
+
+        // check the arguments
+        if ((typeof msg != "string") ||
+            (typeof buf != "object")) {
+            console.log("Bad args to printHex");
+            return;
+        }
+        if (!(buf instanceof ArrayBuffer)) {
+            console.log("Attempted printHex with non-ArrayBuffer:", buf);
+            return;
+        }
+
+        // print the buffer as a 16 byte long hex string
+        var arr = new Uint8Array(buf);
+        var len = buf.byteLength;
+        var i, str = "";
+        console.log(msg, `(${buf.byteLength} bytes)`);
+        for (i = 0; i < len; i++) {
+            var hexch = arr[i].toString(16);
+            hexch = (hexch.length == 1) ? ("0" + hexch) : hexch;
+            str += hexch.toUpperCase() + " ";
+            if (i && !((i + 1) % 16)) {
+                console.log(str);
+                str = "";
+            }
+        }
+        // print the remaining bytes
+        if ((i) % 16) {
+            console.log(str);
+        }
+    }
+
     function arrayBufferEquals(b1, b2) {
+        if (!(b1 instanceof ArrayBuffer) ||
+            !(b2 instanceof ArrayBuffer)) {
+            console.log("arrayBufferEquals: not both ArrayBuffers");
+            console.log("b1 instanceof ArrayBuffer", b1 instanceof ArrayBuffer);
+            console.log("b2 instanceof ArrayBuffer", b2 instanceof ArrayBuffer);
+            return false;
+        }
+
         if (b1.byteLength !== b2.byteLength) return false;
         b1 = new Uint8Array(b1);
         b2 = new Uint8Array(b2);
@@ -63,7 +114,8 @@
      * Copyright (c) 2012 Niklas von Hertzen
      * Licensed under the MIT license.
      */
-    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+    // var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     // Use a lookup table to find the index.
     var lookup = new Uint8Array(256);
@@ -126,178 +178,206 @@
         return String.fromCharCode.apply(null, new Uint16Array(buf));
     }
 
-    var challengeStr = "abc123def456";
-    var challengeBuf = str2ab(challengeStr);
-    var clientDataJson = '{"challenge":"' + b64encode(challengeBuf) + '","origin":"http://localhost:9999","hashAlg":"S256"}';
-    var clientData = JSON.parse(clientDataJson);
-    // hashes can be generated with: http://www.xorbin.com/tools/sha256-hash-calculator
-    var rpIdHashHex = "49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d9763";
-    var clientDataJsonBuf = str2ab(clientDataJson);
-    var clientDataBase64 = b64encode(clientDataJsonBuf);
-    var clientDataHashHex = "8f5e036f15c71efda91f28d208d78e606450005f94bb657f1566f71d007be73a";
-    var packedSelfAttestation = new Uint8Array([
-        0xA3,                                                                                                       // map(3)
-            0x63,                                                                                                   // key(3)
-                0x66, 0x6D, 0x74,                                                                                   // "alg"
-            0x66,                                                                                                   // text(5)
-                0x70, 0x61, 0x63, 0x6B, 0x65, 0x64,                                                                 // "packed"
-            0x68,                                                                                                   // key(8)
-                0x61, 0x75, 0x74, 0x68, 0x44, 0x61, 0x74, 0x61,                                                     // "authData"
-            0x59, 0x01, 0x6D,                                                                                       // bytes(365)
-                0x49, 0x96, 0x0D, 0xE5, 0x88, 0x0E, 0x8C, 0x68, 0x74, 0x34, 0x17, 0x0F, 0x64, 0x76, 0x60, 0x5B,     // [authenticator data]
-                0x8F, 0xE4, 0xAE, 0xB9, 0xA2, 0x86, 0x32, 0xC7, 0x99, 0x5C, 0xF3, 0xBA, 0x83, 0x1D, 0x97, 0x63,     // ...
-                0x41, 0x00, 0x00, 0x00, 0x01, 0xF1, 0xD0, 0xF1, 0xD0, 0xF1, 0xD0, 0xF1, 0xD0, 0xF1, 0xD0, 0xF1,     // ...
-                0xD0, 0xF1, 0xD0, 0xF1, 0xD0, 0x00, 0x20, 0x08, 0x59, 0x20, 0x4C, 0xCC, 0x24, 0xED, 0xB3, 0xFE,     // ...
-                0x45, 0x52, 0xC1, 0x67, 0x50, 0xCA, 0xB7, 0xA6, 0x96, 0x25, 0x61, 0xDA, 0x26, 0xFB, 0xE9, 0xC6,     // ...
-                0xEC, 0xBD, 0xD2, 0x56, 0xF3, 0x27, 0x44, 0xA3, 0x63, 0x61, 0x6C, 0x67, 0x65, 0x52, 0x53, 0x32,     // ...
-                0x35, 0x36, 0x61, 0x6E, 0x59, 0x01, 0x00, 0xA3, 0xC7, 0xEF, 0x14, 0xE2, 0xC5, 0x7E, 0xF3, 0x4A,     // ...
-                0x11, 0xC1, 0xBC, 0xCA, 0x66, 0x19, 0xFD, 0x3D, 0x13, 0x01, 0xB4, 0x19, 0x6A, 0x5D, 0xF5, 0xAA,     // ...
-                0x52, 0x97, 0xFC, 0xF8, 0xDB, 0xF4, 0xA0, 0x78, 0x89, 0xC0, 0x8A, 0x1C, 0x92, 0x8E, 0x30, 0x21,     // ...
-                0x77, 0xE8, 0xA1, 0x03, 0x6E, 0xA8, 0x4B, 0x33, 0x7A, 0x74, 0xE3, 0x84, 0xF8, 0x52, 0x5A, 0x7B,     // ...
-                0x71, 0x39, 0xD6, 0x71, 0x78, 0xCF, 0x46, 0x94, 0xB5, 0x6D, 0x55, 0x68, 0x88, 0x2D, 0xBA, 0xEA,     // ...
-                0xDD, 0x01, 0x0B, 0x45, 0x54, 0xE1, 0xE1, 0x8A, 0x5A, 0xD1, 0xC5, 0x5E, 0x5B, 0x07, 0xFD, 0x52,     // ...
-                0x95, 0x9C, 0x54, 0xDF, 0x2E, 0x29, 0x1D, 0x6C, 0xDB, 0xCA, 0x6E, 0x1D, 0xD1, 0xEE, 0xE7, 0xAE,     // ...
-                0x87, 0x3F, 0xB7, 0x0D, 0x86, 0x68, 0x81, 0xDF, 0x37, 0x94, 0x46, 0xC0, 0x90, 0x49, 0xEE, 0xAE,     // ...
-                0xBA, 0x09, 0xF7, 0x90, 0xDE, 0x90, 0xE8, 0xF2, 0x38, 0x66, 0x28, 0x04, 0x44, 0x4F, 0x64, 0x20,     // ...
-                0xDF, 0x2E, 0x44, 0x9D, 0x9B, 0xBB, 0x4B, 0x0C, 0x22, 0x8D, 0x45, 0x4B, 0xCD, 0x18, 0xD8, 0x57,     // ...
-                0x91, 0x22, 0x73, 0x7E, 0xE5, 0x6D, 0xC0, 0x82, 0x6C, 0xB7, 0x95, 0x73, 0x92, 0xB7, 0xBF, 0x37,     // ...
-                0x36, 0x69, 0xCD, 0xE4, 0xC0, 0x17, 0xD4, 0x4D, 0x99, 0x64, 0x4F, 0xA1, 0xE4, 0xD2, 0x3E, 0x6F,     // ...
-                0xF7, 0xE2, 0x5C, 0x6F, 0x3F, 0x80, 0xE0, 0xD0, 0x1D, 0x07, 0x2B, 0x3C, 0x77, 0xA9, 0x96, 0x4F,     // ...
-                0x9C, 0x74, 0xCC, 0x88, 0x69, 0x0C, 0x77, 0x59, 0x00, 0x03, 0x00, 0x18, 0x3D, 0x0F, 0x28, 0x47,     // ...
-                0x15, 0xD1, 0x65, 0xD3, 0xFC, 0x54, 0x94, 0x7C, 0xAE, 0x0E, 0x13, 0x58, 0x45, 0x20, 0x35, 0x92,     // ...
-                0x6C, 0x07, 0xCA, 0x89, 0xD0, 0xB0, 0x73, 0x28, 0x7E, 0xE0, 0x03, 0x89, 0xB9, 0x01, 0xB9, 0x83,     // ...
-                0x59, 0x2B, 0x7E, 0x43, 0x52, 0x82, 0xE7, 0x61, 0x65, 0x43, 0x01, 0x00, 0x01,                       // ...
-            0x67,                                                                                                   // key(7)
-                0x61, 0x74, 0x74, 0x53, 0x74, 0x6D, 0x74,                                                           // "attStmt"
-            0xA2,                                                                                                   // map(2)
-                0x63,                                                                                               // key(3)
-                    0x61, 0x6C, 0x67,                                                                               // "alg"
-                0x65,                                                                                               // text(5)
-                    0x52, 0x53, 0x32, 0x35, 0x36,                                                                   // "RS256"
-                0x63,                                                                                               // key(3)
-                    0x73, 0x69, 0x67,                                                                               // "sig"
-                0x59, 0x01, 0x00,                                                                                   // bytes(256)
-                    0x99, 0x9D, 0x4D, 0x9A, 0xB3, 0x61, 0x96, 0xFB, 0x9E, 0x5F, 0xA0, 0xAC, 0x3A, 0xEA, 0x75, 0x89, // [RS256 signature]
-                    0xEF, 0x6F, 0x70, 0x42, 0x42, 0x6C, 0x05, 0x3A, 0x8D, 0xF8, 0xFC, 0xA7, 0x58, 0x86, 0x4C, 0xC0, // ...
-                    0xA4, 0xF3, 0xD6, 0x6B, 0x83, 0x54, 0x42, 0x40, 0x9C, 0x25, 0x11, 0x6D, 0xF1, 0x7B, 0x01, 0xD8, // ...
-                    0xE9, 0xC1, 0x1F, 0x82, 0x93, 0x8A, 0x8E, 0x66, 0x54, 0x43, 0xF0, 0x8D, 0x99, 0xCF, 0x07, 0x16, // ...
-                    0x26, 0x05, 0xBB, 0xA5, 0xF0, 0x71, 0x9A, 0x2A, 0xFD, 0xF0, 0x2E, 0xC8, 0xD3, 0x62, 0x04, 0xE6, // ...
-                    0x13, 0x41, 0x82, 0xAE, 0x45, 0x47, 0x54, 0xF6, 0x97, 0xFD, 0xAB, 0xE2, 0x77, 0x92, 0xBA, 0x22, // ...
-                    0xB8, 0xEB, 0x04, 0x54, 0xF0, 0xA4, 0xB6, 0x6A, 0xA0, 0x0D, 0xDB, 0x8A, 0xF6, 0xD9, 0xD1, 0x02, // ...
-                    0x25, 0xC6, 0xFF, 0x61, 0x94, 0xF5, 0x95, 0x8B, 0xED, 0x20, 0xA0, 0x82, 0x79, 0xAE, 0x6F, 0x51, // ...
-                    0xFF, 0xEA, 0xBC, 0x0D, 0xCD, 0xC1, 0xAB, 0x27, 0x99, 0x36, 0x7A, 0xFE, 0x99, 0xCF, 0x2B, 0x19, // ...
-                    0x5A, 0x30, 0xD3, 0x13, 0xAC, 0xEC, 0xE9, 0x7C, 0x2F, 0x5E, 0x0A, 0x74, 0xE5, 0xEC, 0xF7, 0xE6, // ...
-                    0x4B, 0x4E, 0xBA, 0xBF, 0x6A, 0xE0, 0xE3, 0x38, 0x6E, 0xA9, 0x68, 0x55, 0x39, 0xDF, 0xB4, 0x22, // ...
-                    0x0D, 0xC5, 0x15, 0x5C, 0xA3, 0xC7, 0x5C, 0x27, 0x72, 0x9B, 0x91, 0xC7, 0xD9, 0x70, 0xAA, 0x14, // ...
-                    0x65, 0x38, 0x42, 0x9E, 0xF9, 0xE6, 0x5E, 0xFC, 0x4B, 0x7E, 0xF8, 0xB6, 0xF8, 0x57, 0xF1, 0x83, // ...
-                    0xF0, 0x02, 0xC4, 0xDA, 0x01, 0x41, 0x7C, 0xC5, 0x82, 0x06, 0x5D, 0x87, 0x0B, 0x6E, 0x73, 0x4F, // ...
-                    0x39, 0xE7, 0xD6, 0x39, 0xE5, 0xD3, 0xE2, 0xB8, 0xD9, 0xF6, 0xAD, 0xE1, 0x7E, 0x21, 0xB0, 0x4B, // ...
-                    0x19, 0x7B, 0x3A, 0xB4, 0xF0, 0xDF, 0xDF, 0xB7, 0x87, 0x0F, 0x3E, 0xA5, 0x10, 0x75, 0x4C, 0x84  // ...
-        ]).buffer;
+    function bufEqual(a, b) {
+        var len = a.length;
+
+        if (len !== b.length) {
+            console.log("length mismatch");
+            console.log("a", a.length);
+            console.log("b", b.length);
+            return false;
+        }
+
+        for (var i = 0; i < len; i++) {
+            if (a.readUInt8(i) !== b.readUInt8(i)) {
+                console.log("byte mismatch at", i);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    var functions = {
+        printHex,
+        arrayBufferEquals,
+        hex2ab,
+        str2ab,
+        b64decode,
+        b64encode,
+        ab2str,
+        bufEqual
+    };
+
+    /********************************************************************************
+     *********************************************************************************
+     * SERVER MSGS
+     *********************************************************************************
+     *********************************************************************************/
+
+    var challengeRequestMsg = {
+        body: {
+            user: "bubba"
+        }
+    };
+
+    var challengeResponseAttestationNoneMsg = {
+        body: {
+            "binaryEncoding": "base64",
+            "username": "adam",
+            "id": "AAii3V6sGoaozW7TbNaYlJaJ5br8TrBfRXnofZO6l2suc3a5tt/XFuFkFA/5eabU80S1PW0m4IZ79BS2kQO7Zcuy2vf0ESg18GTLG1mo5YSkIdqL2J44egt+6rcj7NedSEwxa/uuxUYBtHNnSQqDmtoUAfM9LSWLl65BjKVZNGUp9ao33mMSdVfQQ0bHze69JVQvLBf8OTiZUqJsOuKmpqUc",
+            "response": {
+                "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVkBJkmWDeWIDoxodDQXD2R2YFuP5K65ooYyx5lc87qDHZdjQQAAAAAAAAAAAAAAAAAAAAAAAAAAAKIACKLdXqwahqjNbtNs1piUlonluvxOsF9Feeh9k7qXay5zdrm239cW4WQUD/l5ptTzRLU9bSbghnv0FLaRA7tly7La9/QRKDXwZMsbWajlhKQh2ovYnjh6C37qtyPs151ITDFr+67FRgG0c2dJCoOa2hQB8z0tJYuXrkGMpVk0ZSn1qjfeYxJ1V9BDRsfN7r0lVC8sF/w5OJlSomw64qampRylAQIDJiABIVgguxHN3W6ehp0VWXKaMNie1J82MVJCFZYScau74o17cx8iWCDb1jkTLi7lYZZbgwUwpqAk8QmIiPMTVQUVkhGEyGrKww==",
+                "clientDataJSON": "eyJjaGFsbGVuZ2UiOiIzM0VIYXYtaloxdjlxd0g3ODNhVS1qMEFSeDZyNW8tWUhoLXdkN0M2alBiZDdXaDZ5dGJJWm9zSUlBQ2Vod2Y5LXM2aFhoeVNITy1ISFVqRXdaUzI5dyIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
+            }
+        }
+    };
+
+    // TODO: needs update
+    var challengeResponseAttestationU2fMsg = {
+        body: {
+            "binaryEncoding": "base64",
+            "username": "adam",
+            "id": "vBWXdRT2VXSuW4pT/wh5lzSUgry4dZAyMWgF0huNj587MNywnnHk5/fQQc/bq8A4ZEgcvbJHQBp5OAHEuK4USg==",
+            "response": {
+                "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVjESZYN5YgOjGh0NBcPZHZgW4/krrmihjLHmVzzuoMdl2NBAAAAAAAAAAAAAAAAAAAAAAAAAAAAQLwVl3UU9lV0rluKU/8IeZc0lIK8uHWQMjFoBdIbjY+fOzDcsJ5x5Of30EHP26vAOGRIHL2yR0AaeTgBxLiuFEqlAQIDJiABIVgguxfgReQylzXn7sreuilLMKYCxjQnLpyKMA2rsh0dcEIiWCCkdVG3htONUrHiLlDCqbNWI5dwIv/YlFI24v37Ne3r6w==",
+                "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJBQ1dSMVNIeUpRUVFBWG1ESlFjbV9mQmgxQXNLcU9qTWRQbW15clg4QUMwdElJU3VoMDBwZWFaV1V5N2RLR2xHVjUxOW1MQnVoNnFkY0pvdlpLNkd5USIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
+            }
+        }
+    };
+
+
+    // attestationObject
+    // A3 63 66 6D 74 64 6E 6F 6E 65 67 61 74 74 53 74
+    // 6D 74 A0 68 61 75 74 68 44 61 74 61 59 01 26 49
+    // 96 0D E5 88 0E 8C 68 74 34 17 0F 64 76 60 5B 8F
+    // E4 AE B9 A2 86 32 C7 99 5C F3 BA 83 1D 97 63 41
+    // 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    // 00 00 00 00 00 A2 00 08 A2 DD 5E AC 1A 86 A8 CD
+    // 6E D3 6C D6 98 94 96 89 E5 BA FC 4E B0 5F 45 79
+    // E8 7D 93 BA 97 6B 2E 73 76 B9 B6 DF D7 16 E1 64
+    // 14 0F F9 79 A6 D4 F3 44 B5 3D 6D 26 E0 86 7B F4
+    // 14 B6 91 03 BB 65 CB B2 DA F7 F4 11 28 35 F0 64
+    // CB 1B 59 A8 E5 84 A4 21 DA 8B D8 9E 38 7A 0B 7E
+    // EA B7 23 EC D7 9D 48 4C 31 6B FB AE C5 46 01 B4
+    // 73 67 49 0A 83 9A DA 14 01 F3 3D 2D 25 8B 97 AE
+    // 41 8C A5 59 34 65 29 F5 AA 37 DE 63 12 75 57 D0
+    // 43 46 C7 CD EE BD 25 54 2F 2C 17 FC 39 38 99 52
+    // A2 6C 3A E2 A6 A6 A5 1C A5 01 02 03 26 20 01 21
+    // 58 20 BB 11 CD DD 6E 9E 86 9D 15 59 72 9A 30 D8
+    // 9E D4 9F 36 31 52 42 15 96 12 71 AB BB E2 8D 7B
+    // 73 1F 22 58 20 DB D6 39 13 2E 2E E5 61 96 5B 83
+    // 05 30 A6 A0 24 F1 09 88 88 F3 13 55 05 15 92 11
+    // 84 C8 6A CA C3
+
+    // clientDataJson
+    // 7B 22 63 68 61 6C 6C 65 6E 67 65 22 3A 22 33 33
+    // 45 48 61 76 2D 6A 5A 31 76 39 71 77 48 37 38 33
+    // 61 55 2D 6A 30 41 52 78 36 72 35 6F 2D 59 48 68
+    // 2D 77 64 37 43 36 6A 50 62 64 37 57 68 36 79 74
+    // 62 49 5A 6F 73 49 49 41 43 65 68 77 66 39 2D 73
+    // 36 68 58 68 79 53 48 4F 2D 48 48 55 6A 45 77 5A
+    // 53 32 39 77 22 2C 22 63 6C 69 65 6E 74 45 78 74
+    // 65 6E 73 69 6F 6E 73 22 3A 7B 7D 2C 22 68 61 73
+    // 68 41 6C 67 6F 72 69 74 68 6D 22 3A 22 53 48 41
+    // 2D 32 35 36 22 2C 22 6F 72 69 67 69 6E 22 3A 22
+    // 68 74 74 70 73 3A 2F 2F 6C 6F 63 61 6C 68 6F 73
+    // 74 3A 38 34 34 33 22 2C 22 74 79 70 65 22 3A 22
+    // 77 65 62 61 75 74 68 6E 2E 63 72 65 61 74 65 22
+    // 7D
+
+    var server = {
+        challengeRequestMsg: challengeRequestMsg,
+        challengeResponseAttestationNoneMsg: challengeResponseAttestationNoneMsg,
+        challengeResponseAttestationU2fMsg: challengeResponseAttestationU2fMsg
+    };
+
+    /********************************************************************************
+     *********************************************************************************
+     * LIB PARAMS
+     *********************************************************************************
+     *********************************************************************************/
+
+    var makeCredentialAttestationNoneResponse = {
+        username: challengeResponseAttestationNoneMsg.body.username,
+        id: challengeResponseAttestationNoneMsg.body.id,
+        response: {
+            attestationObject: b64decode(challengeResponseAttestationNoneMsg.body.response.attestationObject),
+            clientDataJSON: b64decode(challengeResponseAttestationNoneMsg.body.response.clientDataJSON)
+        }
+    };
+
+    var makeCredentialAttestationU2fResponse = {
+        username: challengeResponseAttestationU2fMsg.body.username,
+        id: challengeResponseAttestationU2fMsg.body.id,
+        response: {
+            attestationObject: b64decode(challengeResponseAttestationU2fMsg.body.response.attestationObject),
+            clientDataJSON: b64decode(challengeResponseAttestationU2fMsg.body.response.clientDataJSON)
+        }
+    };
+
+    var lib = {
+        makeCredentialAttestationNoneResponse: makeCredentialAttestationNoneResponse,
+        makeCredentialAttestationU2fResponse: makeCredentialAttestationU2fResponse
+    };
+
+    /********************************************************************************
+     *********************************************************************************
+     * NAKED FIELDS
+     *********************************************************************************
+     *********************************************************************************/
+    var clientDataJsonBuf = makeCredentialAttestationNoneResponse.response.clientDataJSON;
+    var clientDataJsonObj = {
+        challenge: '33EHav-jZ1v9qwH783aU-j0ARx6r5o-YHh-wd7C6jPbd7Wh6ytbIZosIIACehwf9-s6hXhySHO-HHUjEwZS29w',
+        clientExtensions: {},
+        hashAlgorithm: 'SHA-256',
+        origin: 'https://localhost:8443',
+        type: 'webauthn.create'
+    };
+    var authDataNoneArray = [
+        0x49, 0x96, 0x0D, 0xE5, 0x88, 0x0E, 0x8C, 0x68, 0x74, 0x34, 0x17, 0x0F, 0x64, 0x76, 0x60, 0x5B,
+        0x8F, 0xE4, 0xAE, 0xB9, 0xA2, 0x86, 0x32, 0xC7, 0x99, 0x5C, 0xF3, 0xBA, 0x83, 0x1D, 0x97, 0x63,
+        0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA2, 0x00, 0x08, 0xA2, 0xDD, 0x5E, 0xAC, 0x1A, 0x86, 0xA8,
+        0xCD, 0x6E, 0xD3, 0x6C, 0xD6, 0x98, 0x94, 0x96, 0x89, 0xE5, 0xBA, 0xFC, 0x4E, 0xB0, 0x5F, 0x45,
+        0x79, 0xE8, 0x7D, 0x93, 0xBA, 0x97, 0x6B, 0x2E, 0x73, 0x76, 0xB9, 0xB6, 0xDF, 0xD7, 0x16, 0xE1,
+        0x64, 0x14, 0x0F, 0xF9, 0x79, 0xA6, 0xD4, 0xF3, 0x44, 0xB5, 0x3D, 0x6D, 0x26, 0xE0, 0x86, 0x7B,
+        0xF4, 0x14, 0xB6, 0x91, 0x03, 0xBB, 0x65, 0xCB, 0xB2, 0xDA, 0xF7, 0xF4, 0x11, 0x28, 0x35, 0xF0,
+        0x64, 0xCB, 0x1B, 0x59, 0xA8, 0xE5, 0x84, 0xA4, 0x21, 0xDA, 0x8B, 0xD8, 0x9E, 0x38, 0x7A, 0x0B,
+        0x7E, 0xEA, 0xB7, 0x23, 0xEC, 0xD7, 0x9D, 0x48, 0x4C, 0x31, 0x6B, 0xFB, 0xAE, 0xC5, 0x46, 0x01,
+        0xB4, 0x73, 0x67, 0x49, 0x0A, 0x83, 0x9A, 0xDA, 0x14, 0x01, 0xF3, 0x3D, 0x2D, 0x25, 0x8B, 0x97,
+        0xAE, 0x41, 0x8C, 0xA5, 0x59, 0x34, 0x65, 0x29, 0xF5, 0xAA, 0x37, 0xDE, 0x63, 0x12, 0x75, 0x57,
+        0xD0, 0x43, 0x46, 0xC7, 0xCD, 0xEE, 0xBD, 0x25, 0x54, 0x2F, 0x2C, 0x17, 0xFC, 0x39, 0x38, 0x99,
+        0x52, 0xA2, 0x6C, 0x3A, 0xE2, 0xA6, 0xA6, 0xA5, 0x1C, 0xA5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01,
+        0x21, 0x58, 0x20, 0xBB, 0x11, 0xCD, 0xDD, 0x6E, 0x9E, 0x86, 0x9D, 0x15, 0x59, 0x72, 0x9A, 0x30,
+        0xD8, 0x9E, 0xD4, 0x9F, 0x36, 0x31, 0x52, 0x42, 0x15, 0x96, 0x12, 0x71, 0xAB, 0xBB, 0xE2, 0x8D,
+        0x7B, 0x73, 0x1F, 0x22, 0x58, 0x20, 0xDB, 0xD6, 0x39, 0x13, 0x2E, 0x2E, 0xE5, 0x61, 0x96, 0x5B,
+        0x83, 0x05, 0x30, 0xA6, 0xA0, 0x24, 0xF1, 0x09, 0x88, 0x88, 0xF3, 0x13, 0x55, 0x05, 0x15, 0x92,
+        0x11, 0x84, 0xC8, 0x6A, 0xCA, 0xC3
+    ];
+    var authDataFromNone = new Uint8Array(authDataNoneArray).buffer;
+    var authDataU2fArray = [];
+    var authDataFromU2f = new Uint8Array(authDataU2fArray).buffer;
+
+    var rpIdHashArray = [
+        0x49, 0x96, 0x0D, 0xE5, 0x88, 0x0E, 0x8C, 0x68, 0x74, 0x34, 0x17, 0x0F, 0x64, 0x76, 0x60, 0x5B,
+        0x8F, 0xE4, 0xAE, 0xB9, 0xA2, 0x86, 0x32, 0xC7, 0x99, 0x5C, 0xF3, 0xBA, 0x83, 0x1D, 0x97, 0x63
+    ];
+    var rpIdHash = new Uint8Array(rpIdHashArray).buffer;
+
+    var naked = {
+        clientDataJsonBuf,
+        clientDataJsonObj,
+        authDataFromNone,
+        authDataFromU2f,
+        rpIdHash
+    };
 
     return {
-        userAccountInformation: {
-            rpDisplayName: "PayPal",
-            displayName: "John P. Smith",
-            name: "johnpsmith@gmail.com",
-            id: "1098237235409872",
-            imageUri: "https://pics.paypal.com/00/p/aBjjjpqPb.png"
-        },
-        cryptoParams: [{
-            type: "ScopedCred",
-            algorithm: "RSASSA-PKCS1-v1_5",
-        }],
-        expectedCryptoParams: {
-            type: "ScopedCred",
-            algorithm: "RSASSA-PKCS1-v1_5",
-        },
-        opts: {},
-        scopedCredentialType: "ScopedCred",
-
-        /**
-         * a challenge for makeCredential or getAttestation
-         * @type {ArrayBuffer}
-         */
-        challenge: (Uint8Array.from(challengeStr.split("").map(function(ch) {return ch.charCodeAt(0)}))).buffer,
-
-        /**
-         * the string version of `challenge`
-         * @type {String}
-         */
-        challengeBase64: "YWJjMTIzZGVmNDU2",
-
-        /**
-         * A typical response for the makeCredential() call, mostly based on ScopedCredentialInfo
-         * @type {Object}
-         */
-        // makeCredentialResponse: {
-        //     clientDataJSON: clientDataJsonBuf,
-
-        // },
-
-        /**
-         * options for makeCredential or getAssertion that cause it to time out after 1 second
-         * @type {Object}
-         */
-        timeoutOpts: {
-            timeout: 1
-        },
-
-        /**
-         * A self-attestation example
-         * @type {Object}
-         */
-        makeCredentialSelfAttestationResponse: {
-            clientDataJSON: clientDataJsonBuf,
-            attestationObject: packedSelfAttestation
-        },
-
-        /**
-         * Typical client data
-         * @type {Object}
-         * @see https://www.w3.org/TR/webauthn/#sec-client-data
-         */
-        clientData: clientData,
-
-        /**
-         * The example clientData, encoded as base64 JSON
-         * @type {String}
-         */
-        clientDataBase64: clientDataBase64,
-        clientDataJsonBuf: clientDataJsonBuf,
-
-        /**
-         * A SHA256 hash of the example clientDataBase64, encoded as a hex string
-         * @type {String}
-         */
-        clientDataHashHex: clientDataHashHex,
-        clientDataHash: hex2ab(clientDataHashHex),
-        /**
-         * the default relying party ID
-         * @type {String}
-         */
-        rpId: "localhost",
-
-        /**
-         * the hash of the rpId ("localhost"), encoded as a hex string
-         * @type {String}
-         */
-        rpIdHashHex: rpIdHashHex,
-        rpIdHash: hex2ab(rpIdHashHex),
-        packedSelfAttestation: packedSelfAttestation,
-        /**
-         * Typical authenticator data
-         * @type {Object}
-         * @see https://www.w3.org/TR/webauthn/#authenticatordata
-         */
-        authenticatorData: [],
-
-        arrayBufferEquals: arrayBufferEquals,
-        hex2ab: hex2ab,
-        str2ab: str2ab,
-        ab2str: ab2str,
-        b64decode: b64decode,
-        b64encode: b64encode
+        functions,
+        server,
+        lib,
+        naked
     };
 })); /* end AMD module */
 
