@@ -62,9 +62,6 @@
     function arrayBufferEquals(b1, b2) {
         if (!(b1 instanceof ArrayBuffer) ||
             !(b2 instanceof ArrayBuffer)) {
-            console.log("arrayBufferEquals: not both ArrayBuffers");
-            console.log("b1 instanceof ArrayBuffer", b1 instanceof ArrayBuffer);
-            console.log("b2 instanceof ArrayBuffer", b2 instanceof ArrayBuffer);
             return false;
         }
 
@@ -198,6 +195,26 @@
         return true;
     }
 
+    function cloneObject(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    function coerceToArrayBuffer(buf, name) {
+        if (buf instanceof Buffer || Array.isArray(buf)) {
+            buf = new Uint8Array(buf);
+        }
+
+        if (buf instanceof Uint8Array) {
+            buf = buf.buffer;
+        }
+
+        if (!(buf instanceof ArrayBuffer)) {
+            throw new TypeError(`could not coerce '${name}' to ArrayBuffer`);
+        }
+
+        return buf;
+    }
+
     var functions = {
         printHex,
         arrayBufferEquals,
@@ -206,8 +223,25 @@
         b64decode,
         b64encode,
         ab2str,
-        bufEqual
+        bufEqual,
+        cloneObject,
+        coerceToArrayBuffer
     };
+
+
+    /********************************************************************************
+     *********************************************************************************
+     * CTAP2 MSGS
+     *********************************************************************************
+     *********************************************************************************/
+
+    // var makeCredReq = "AaQBWCAmxXQY29T5II0ouvR1rOW0iHKXRtx5dKEFO_8Ezgl51gKiYmlkc2h0dHBzOi8vZXhhbXBsZS5jb21kbmFtZXgYVGhlIEV4YW1wbGUgQ29ycG9yYXRpb24hA6RiaWRYIIt5GedNcaaY_GSTvnLIEagifkIT4fV8oCd_eAf6MivpZGljb254KGh0dHBzOi8vcGljcy5hY21lLmNvbS8wMC9wL2FCampqcHFQYi5wbmdkbmFtZXZqb2hucHNtaXRoQGV4YW1wbGUuY29ta2Rpc3BsYXlOYW1lbUpvaG4gUC4gU21pdGgEgqJjYWxnJmR0eXBlanB1YmxpYy1rZXmiY2FsZzkBAGR0eXBlanB1YmxpYy1rZXk";
+    // var ctap2ClientData = "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoibU11LVlVUU85amZYZWIyaWNIeXlJRWJRelN1VFJNbXFlR3hka3R3UVZ6dyIsIm9yaWdpbiI6Imh0dHBzOi8vZXhhbXBsZS5jb20ifQ";
+    // var makeCredResp = "AKMBZnBhY2tlZAJZAMQQBoCtVGzmpXf0L1LfM7TP3KdWhZ5mS4194ymxUNCc6UEAAAQE-KAR84wKTRWABhcRH57cfQBAVnYjWrbswoCsYrv7iPDzl1-2Q9ACivVIhP2p_GumWw-HFo5Q7Tlo0vdiHk7E2Bc_u32IpTDK4nhBu5GPRWfXeKUBAgMmIAEhWCB2k630Xmpgcw1Hs0-h6uyOTCDFfIjLCQ6CBNnuHi7B4iJYIBHcfy7jcKW1eZE5LqbFSu3Mq8i100Pt1dM4uXljlSO2A6NjYWxnJmNzaWdYRzBFAiAAzt45GP_n-VK_xdKDrdsPdSLLPN_8tIQ5Gjloi5vSzAIhAICTWwvWjdvehi2v5g7kk48t0mZWudF1zJkMvKrl2hCWY3g1Y4FZAZcwggGTMIIBOKADAgECAgkAhZtybLJLTCkwCgYIKoZIzj0EAwIwRzELMAkGA1UEBhMCVVMxFDASBgNVBAoMC1l1YmljbyBUZXN0MSIwIAYDVQQLDBlBdXRoZW50aWNhdG9yIEF0dGVzdGF0aW9uMB4XDTE2MTIwNDExNTUwMFoXDTI2MTIwMjExNTUwMFowRzELMAkGA1UEBhMCVVMxFDASBgNVBAoMC1l1YmljbyBUZXN0MSIwIAYDVQQLDBlBdXRoZW50aWNhdG9yIEF0dGVzdGF0aW9uMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAErRHrDohS5TrV3-2GtB5hNKGOxOGvjyIaPH1uY2yA6hPD1QT_LnYhG7RFJbGWxEy0hJl5z2-Jbs0ruGDeG_Q3a6MNMAswCQYDVR0TBAIwADAKBggqhkjOPQQDAgNJADBGAiEA6aOfGwMZdSX3Nz4QznfngCFzG5TQwD8_2h_SLbPQMOcCIQDE-uw0Raggz0MSnNsAqr79muLYdPnF00PLLxE9ojcj8w";
+
+    // var getAssertionReq = "AqMBc2h0dHBzOi8vZXhhbXBsZS5jb20CWCAzxPe7r0xKXYUt1EQReyXHwOpvEmNkDb9PmQcxRMU58QOBomJpZFhAVnYjWrbswoCsYrv7iPDzl1-2Q9ACivVIhP2p_GumWw-HFo5Q7Tlo0vdiHk7E2Bc_u32IpTDK4nhBu5GPRWfXeGR0eXBlanB1YmxpYy1rZXkeyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiVU9mREVnbThrMWRfaU5UM2ZXdDFkZVloSDRrT3JPS1BpV2xCNmYyNGRjTSIsIm9yaWdpbiI6Imh0dHBzOi8vZXhhbXBsZS5jb20ifQ";
+    // var getAssertionResp = "AKMBomJpZFhAVnYjWrbswoCsYrv7iPDzl1-2Q9ACivVIhP2p_GumWw-HFo5Q7Tlo0vdiHk7E2Bc_u32IpTDK4nhBu5GPRWfXeGR0eXBlanB1YmxpYy1rZXkCWQAlEAaArVRs5qV39C9S3zO0z9ynVoWeZkuNfeMpsVDQnOkBAAAEBQNYRjBEAiAIFzgGvsa1zUOkoirFZ6KpeXFuX5NgvRenz47_kySpIgIgDMnl-UfMYfA9OQwbkSQd2qJvbPIF4XZZVX1NNKzuwEw";
+
 
     /********************************************************************************
      *********************************************************************************
@@ -238,53 +272,25 @@
         body: {
             "binaryEncoding": "base64",
             "username": "adam",
-            "id": "vBWXdRT2VXSuW4pT/wh5lzSUgry4dZAyMWgF0huNj587MNywnnHk5/fQQc/bq8A4ZEgcvbJHQBp5OAHEuK4USg==",
+            "id": "Bo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IirQ==",
             "response": {
-                "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVjESZYN5YgOjGh0NBcPZHZgW4/krrmihjLHmVzzuoMdl2NBAAAAAAAAAAAAAAAAAAAAAAAAAAAAQLwVl3UU9lV0rluKU/8IeZc0lIK8uHWQMjFoBdIbjY+fOzDcsJ5x5Of30EHP26vAOGRIHL2yR0AaeTgBxLiuFEqlAQIDJiABIVgguxfgReQylzXn7sreuilLMKYCxjQnLpyKMA2rsh0dcEIiWCCkdVG3htONUrHiLlDCqbNWI5dwIv/YlFI24v37Ne3r6w==",
-                "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJBQ1dSMVNIeUpRUVFBWG1ESlFjbV9mQmgxQXNLcU9qTWRQbW15clg4QUMwdElJU3VoMDBwZWFaV1V5N2RLR2xHVjUxOW1MQnVoNnFkY0pvdlpLNkd5USIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
+                "attestationObject": "o2NmbXRoZmlkby11MmZnYXR0U3RtdKJjc2lnWEgwRgIhAO+683ISJhKdmUPmVbQuYZsp8lkD7YJcInHS3QOfbrioAiEAzgMJ499cBczBw826r1m55Jmd9mT4d1iEXYS8FbIn8MpjeDVjgVkCSDCCAkQwggEuoAMCAQICBFVivqAwCwYJKoZIhvcNAQELMC4xLDAqBgNVBAMTI1l1YmljbyBVMkYgUm9vdCBDQSBTZXJpYWwgNDU3MjAwNjMxMCAXDTE0MDgwMTAwMDAwMFoYDzIwNTAwOTA0MDAwMDAwWjAqMSgwJgYDVQQDDB9ZdWJpY28gVTJGIEVFIFNlcmlhbCAxNDMyNTM0Njg4MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESzMfdz2BRLmZXL5FhVF+F1g6pHYjaVy+haxILIAZ8sm5RnrgRbDmbxMbLqMkPJH9pgLjGPP8XY0qerrnK9FDCaM7MDkwIgYJKwYBBAGCxAoCBBUxLjMuNi4xLjQuMS40MTQ4Mi4xLjUwEwYLKwYBBAGC5RwCAQEEBAMCBSAwCwYJKoZIhvcNAQELA4IBAQCsFtmzbrazqbdtdZSzT1n09z7byf3rKTXra0Ucq/QdJdPnFhTXRyYEynKleOMj7bdgBGhfBefRub4F226UQPrFz8kypsr66FKZdy7bAnggIDzUFB0+629qLOmeOVeAMmOrq41uxICn3whK0sunt9bXfJTD68CxZvlgV8r1/jpjHqJqQzdio2++z0z0RQliX9WvEEmqfIvHaJpmWemvXejw1ywoglF0xQ4Gq39qB5CDe22zKr/cvKg1y7sJDvHw2Z4Iab/p5WdkxCMObAV3KbAQ3g7F+czkyRwoJiGOqAgau5aRUewWclryqNled5W8qiJ6m5RDIMQnYZyq+FTZgpjXaGF1dGhEYXRhWMRJlg3liA6MaHQ0Fw9kdmBbj+SuuaKGMseZXPO6gx2XY0EAAAAAAAAAAAAAAAAAAAAAAAAAAABABo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IiraUBAgMmIAEhWCA1c9AIeH5sN6x1Q+2qR7v255tkeGbWs0ECCDw35kJGBCJYIBjTUxruadjFFMnWlR5rPJr23sBJT9qexY9PCc9o8hmT",
+                "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJWdTh1RHFua3dPamQ4M0tMajZTY24yQmdGTkxGYkdSN0txX1hKSndRbm5hdHp0VVI3WElCTDdLOHVNUENJYVFtS3cxTUNWUTVhYXpOSkZrN05ha2dxQSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
             }
         }
     };
 
-
-    // attestationObject
-    // A3 63 66 6D 74 64 6E 6F 6E 65 67 61 74 74 53 74
-    // 6D 74 A0 68 61 75 74 68 44 61 74 61 59 01 26 49
-    // 96 0D E5 88 0E 8C 68 74 34 17 0F 64 76 60 5B 8F
-    // E4 AE B9 A2 86 32 C7 99 5C F3 BA 83 1D 97 63 41
-    // 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    // 00 00 00 00 00 A2 00 08 A2 DD 5E AC 1A 86 A8 CD
-    // 6E D3 6C D6 98 94 96 89 E5 BA FC 4E B0 5F 45 79
-    // E8 7D 93 BA 97 6B 2E 73 76 B9 B6 DF D7 16 E1 64
-    // 14 0F F9 79 A6 D4 F3 44 B5 3D 6D 26 E0 86 7B F4
-    // 14 B6 91 03 BB 65 CB B2 DA F7 F4 11 28 35 F0 64
-    // CB 1B 59 A8 E5 84 A4 21 DA 8B D8 9E 38 7A 0B 7E
-    // EA B7 23 EC D7 9D 48 4C 31 6B FB AE C5 46 01 B4
-    // 73 67 49 0A 83 9A DA 14 01 F3 3D 2D 25 8B 97 AE
-    // 41 8C A5 59 34 65 29 F5 AA 37 DE 63 12 75 57 D0
-    // 43 46 C7 CD EE BD 25 54 2F 2C 17 FC 39 38 99 52
-    // A2 6C 3A E2 A6 A6 A5 1C A5 01 02 03 26 20 01 21
-    // 58 20 BB 11 CD DD 6E 9E 86 9D 15 59 72 9A 30 D8
-    // 9E D4 9F 36 31 52 42 15 96 12 71 AB BB E2 8D 7B
-    // 73 1F 22 58 20 DB D6 39 13 2E 2E E5 61 96 5B 83
-    // 05 30 A6 A0 24 F1 09 88 88 F3 13 55 05 15 92 11
-    // 84 C8 6A CA C3
-
-    // clientDataJson
-    // 7B 22 63 68 61 6C 6C 65 6E 67 65 22 3A 22 33 33
-    // 45 48 61 76 2D 6A 5A 31 76 39 71 77 48 37 38 33
-    // 61 55 2D 6A 30 41 52 78 36 72 35 6F 2D 59 48 68
-    // 2D 77 64 37 43 36 6A 50 62 64 37 57 68 36 79 74
-    // 62 49 5A 6F 73 49 49 41 43 65 68 77 66 39 2D 73
-    // 36 68 58 68 79 53 48 4F 2D 48 48 55 6A 45 77 5A
-    // 53 32 39 77 22 2C 22 63 6C 69 65 6E 74 45 78 74
-    // 65 6E 73 69 6F 6E 73 22 3A 7B 7D 2C 22 68 61 73
-    // 68 41 6C 67 6F 72 69 74 68 6D 22 3A 22 53 48 41
-    // 2D 32 35 36 22 2C 22 6F 72 69 67 69 6E 22 3A 22
-    // 68 74 74 70 73 3A 2F 2F 6C 6F 63 61 6C 68 6F 73
-    // 74 3A 38 34 34 33 22 2C 22 74 79 70 65 22 3A 22
-    // 77 65 62 61 75 74 68 6E 2E 63 72 65 61 74 65 22
-    // 7D
+    // var challengeResponseAttestationPackedMsg = {
+    //     body: {
+    //         "binaryEncoding": "base64",
+    //         "username": "adam",
+    //         "id": "Bo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IirQ==",
+    //         "response": {
+    //             "attestationObject": null,
+    //             "clientDataJson": ctap2ClientData
+    //         }
+    //     }
+    // };
 
     var server = {
         challengeRequestMsg: challengeRequestMsg,
@@ -382,5 +388,4 @@
 })); /* end AMD module */
 
 /* JSHINT */
-/* exported server, authenticatorMakeCredentialCommandCbor, derEccPublicKey, credentialCbor, makeCredRespCbor, getAssertRespCbor */
 /* globals define */
