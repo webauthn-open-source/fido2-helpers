@@ -2,10 +2,10 @@
  * https://github.com/umdjs/umd/blob/master/templates/returnExports.js
  */
 (function(root, factory) {
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define === "function" && define.amd) {
         // register as an AMD anonymous module
         define([], factory);
-    } else if (typeof module === 'object' && module.exports) {
+    } else if (typeof module === "object" && module.exports) {
         // use a node.js style export
         module.exports = factory();
     } else {
@@ -75,12 +75,12 @@
     }
 
     function hex2ab(hex) {
-        if (typeof hex !== 'string') {
-            throw new TypeError('Expected input to be a string');
+        if (typeof hex !== "string") {
+            throw new TypeError("Expected input to be a string");
         }
 
         if ((hex.length % 2) !== 0) {
-            throw new RangeError('Expected string to be an even number of characters');
+            throw new RangeError("Expected string to be an even number of characters");
         }
 
         var view = new Uint8Array(hex.length / 2);
@@ -196,18 +196,31 @@
     }
 
     function cloneObject(obj) {
+        if (obj === undefined) {
+            throw new TypeError("obj was undefined");
+        }
         return JSON.parse(JSON.stringify(obj));
     }
 
     function coerceToArrayBuffer(buf, name) {
+        if (typeof buf === "string") {
+            // base64url to base64
+            buf = buf.replace(/-/g, "+").replace(/_/g, "/");
+            // base64 to Buffer
+            buf = Buffer.from(buf, "base64");
+        }
+
+        // Buffer or Array to Uint8Array
         if (buf instanceof Buffer || Array.isArray(buf)) {
             buf = new Uint8Array(buf);
         }
 
+        // Uint8Array to ArrayBuffer
         if (buf instanceof Uint8Array) {
             buf = buf.buffer;
         }
 
+        // error if none of the above worked
         if (!(buf instanceof ArrayBuffer)) {
             throw new TypeError(`could not coerce '${name}' to ArrayBuffer`);
         }
@@ -250,9 +263,7 @@
      *********************************************************************************/
 
     var challengeRequestMsg = {
-        body: {
-            user: "bubba"
-        }
+        username: "bubba"
     };
 
     var challengeResponseAttestationNoneMsg = {
@@ -292,10 +303,24 @@
     //     }
     // };
 
+    var assertionResponseMsg = {
+        body: {
+            "binaryEncoding": "base64",
+            "id": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA+fPKUVYNGE2XYcjhihtYODQv+xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx+rbq/RMUbaJ+HoGVt+c820ifdoagkFR02Van8Vr9q67Bn6zHNDT/DNrQbtpIUqqX/Rg2p5o6F7bVO3uOJG9hUNgUb",
+            "response": {
+                "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJlYVR5VU5ueVBERGRLOFNORWdURVV2ejFROGR5bGtqalRpbVlkNVg3UUFvLUY4X1oxbHNKaTNCaWxVcEZaSGtJQ05EV1k4cjlpdm5UZ1c3LVhaQzNxUSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uZ2V0In0=",
+                "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4/krrmihjLHmVzzuoMdl2MBAAABaw==",
+                "signature": "MEYCIQD6dF3B0ZoaLA0r78oyRdoMNR0bN93Zi4cF/75hFAH6pQIhALY0UIsrh03u/f4yKOwzwD6Cj3/GWLJiioTT9580s1a7",
+                "userHandle": ""
+            }
+        }
+    };
+
     var server = {
-        challengeRequestMsg: challengeRequestMsg,
-        challengeResponseAttestationNoneMsg: challengeResponseAttestationNoneMsg,
-        challengeResponseAttestationU2fMsg: challengeResponseAttestationU2fMsg
+        challengeRequestMsg,
+        challengeResponseAttestationNoneMsg,
+        challengeResponseAttestationU2fMsg,
+        assertionResponseMsg
     };
 
     /********************************************************************************
@@ -322,9 +347,27 @@
         }
     };
 
+    var assertionResponse = {
+        id: assertionResponseMsg.body.id,
+        response: {
+            clientDataJSON: b64decode(assertionResponseMsg.body.response.clientDataJSON),
+            authenticatorData: b64decode(assertionResponseMsg.body.response.authenticatorData),
+            signature: b64decode(assertionResponseMsg.body.response.signature),
+            userHandle: b64decode(assertionResponseMsg.body.response.userHandle)
+        }
+    };
+
+    var assnPublicKey =
+        "-----BEGIN PUBLIC KEY-----\n" +
+        "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERez9aO2wBAWO54MuGbEqSdWahSnG\n" +
+        "MAg35BCNkaE3j8Q+O/ZhhKqTeIKm7El70EG6ejt4sg1ZaoQ5ELg8k3ywTg==\n" +
+        "-----END PUBLIC KEY-----\n";
+
     var lib = {
-        makeCredentialAttestationNoneResponse: makeCredentialAttestationNoneResponse,
-        makeCredentialAttestationU2fResponse: makeCredentialAttestationU2fResponse
+        makeCredentialAttestationNoneResponse,
+        makeCredentialAttestationU2fResponse,
+        assertionResponse,
+        assnPublicKey
     };
 
     /********************************************************************************
@@ -334,11 +377,11 @@
      *********************************************************************************/
     var clientDataJsonBuf = makeCredentialAttestationNoneResponse.response.clientDataJSON;
     var clientDataJsonObj = {
-        challenge: '33EHav-jZ1v9qwH783aU-j0ARx6r5o-YHh-wd7C6jPbd7Wh6ytbIZosIIACehwf9-s6hXhySHO-HHUjEwZS29w',
+        challenge: "33EHav-jZ1v9qwH783aU-j0ARx6r5o-YHh-wd7C6jPbd7Wh6ytbIZosIIACehwf9-s6hXhySHO-HHUjEwZS29w",
         clientExtensions: {},
-        hashAlgorithm: 'SHA-256',
-        origin: 'https://localhost:8443',
-        type: 'webauthn.create'
+        hashAlgorithm: "SHA-256",
+        origin: "https://localhost:8443",
+        type: "webauthn.create"
     };
     var authDataNoneArray = [
         0x49, 0x96, 0x0D, 0xE5, 0x88, 0x0E, 0x8C, 0x68, 0x74, 0x34, 0x17, 0x0F, 0x64, 0x76, 0x60, 0x5B,
