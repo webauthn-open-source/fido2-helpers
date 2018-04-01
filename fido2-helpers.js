@@ -1,3 +1,5 @@
+"use strict";
+
 /* Universial Module (UMD) design pattern
  * https://github.com/umdjs/umd/blob/master/templates/returnExports.js
  */
@@ -13,7 +15,7 @@
         root.fido2Helpers = factory();
     }
     // the return value of this function is what becomes the AMD / CommonJS / Global export
-}(this, function() {
+}(this, function() { // eslint-disable-line no-invalid-this
 
     /********************************************************************************
      *********************************************************************************
@@ -31,11 +33,11 @@
         // check the arguments
         if ((typeof msg != "string") ||
             (typeof buf != "object")) {
-            console.log("Bad args to printHex");
+            console.log("Bad args to printHex"); // eslint-disable-line no-console
             return;
         }
         if (!(buf instanceof ArrayBuffer)) {
-            console.log("Attempted printHex with non-ArrayBuffer:", buf);
+            console.log("Attempted printHex with non-ArrayBuffer:", buf); // eslint-disable-line no-console
             return;
         }
 
@@ -43,19 +45,19 @@
         var arr = new Uint8Array(buf);
         var len = buf.byteLength;
         var i, str = "";
-        console.log(msg, `(${buf.byteLength} bytes)`);
+        console.log(msg, `(${buf.byteLength} bytes)`); // eslint-disable-line no-console
         for (i = 0; i < len; i++) {
             var hexch = arr[i].toString(16);
             hexch = (hexch.length == 1) ? ("0" + hexch) : hexch;
             str += hexch.toUpperCase() + " ";
             if (i && !((i + 1) % 16)) {
-                console.log(str);
+                console.log(str); // eslint-disable-line no-console
                 str = "";
             }
         }
         // print the remaining bytes
         if ((i) % 16) {
-            console.log(str);
+            console.log(str); // eslint-disable-line no-console
         }
     }
 
@@ -537,6 +539,3 @@
         certs
     };
 })); /* end AMD module */
-
-/* JSHINT */
-/* globals define */
