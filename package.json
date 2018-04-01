@@ -4,8 +4,7 @@
   "description": "Helpers for testing FIDO 2.0 / WebAuthn / CTAP",
   "main": "fido2-helpers.js",
   "scripts": {
-    "docs": "jsdoc -c ./.jsdoc-conf.json",
-    "publish": "istanbul-coveralls && gh-pages --silent --repo https://$GH_TOKEN@github.com/apowers313/new-project.git --dist docs"
+    "docs": "jsdoc -c ./.jsdoc-conf.json"
   },
   "keywords": [
     "webauthn",
