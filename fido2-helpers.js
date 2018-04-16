@@ -181,15 +181,11 @@
         var len = a.length;
 
         if (len !== b.length) {
-            console.log("length mismatch");
-            console.log("a", a.length);
-            console.log("b", b.length);
             return false;
         }
 
         for (var i = 0; i < len; i++) {
             if (a.readUInt8(i) !== b.readUInt8(i)) {
-                console.log("byte mismatch at", i);
                 return false;
             }
         }
@@ -268,6 +264,75 @@
         username: "bubba"
     };
 
+    var creationOptionsRequest = {
+        username: "bubba",
+        displayName: "Bubba Smith",
+        authenticatorSelection: {
+            authenticatorAttachment: "cross-platform",
+            requireResidentKey: false,
+            userVerification: "preferred"
+        },
+        attestation: "none"
+    };
+
+    var basicCreationOptions = {
+        status: "ok",
+        challenge: "sP4MiwodjreC8-80IMjcyWNlo_Y1SJXmFgQNBilnjdf30WRsjFDhDYmfY4-4uhq2HFjYREbXdr6Vjuvz2XvTjA==",
+        rp: {
+            name: "My RP"
+        },
+        user: {
+            id: "YWRhbQ==",
+            displayName: "Adam Powers",
+            name: "apowers"
+        },
+        pubKeyCredParams: [{
+            alg: -7,
+            type: "public-key"
+        }]
+    };
+
+    var completeCreationOptions = {
+        status: "ok",
+        challenge: "sP4MiwodjreC8-80IMjcyWNlo_Y1SJXmFgQNBilnjdf30WRsjFDhDYmfY4-4uhq2HFjYREbXdr6Vjuvz2XvTjA==",
+        rp: {
+            name: "My RP",
+            id: "TXkgUlA=",
+            icon: "aWNvbnBuZ2RhdGFibGFoYmxhaGJsYWg="
+        },
+        user: {
+            id: "YWRhbQ==",
+            displayName: "Adam Powers",
+            name: "apowers",
+            icon: "aWNvbnBuZ2RhdGFibGFoYmxhaGJsYWg="
+        },
+        pubKeyCredParams: [{
+            alg: -7,
+            type: "public-key"
+        }],
+        timeout: 30000,
+        excludeCredentials: [{
+            type: "public-key",
+            id: "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA-fPKUVYNGE2XYcjhihtYODQv-xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx-rbq_RMUbaJ-HoGVt-c820ifdoagkFR02Van8Vr9q67Bn6zHNDT_DNrQbtpIUqqX_Rg2p5o6F7bVO3uOJG9hUNgUb",
+            transports: ["usb", "nfc", "ble"]
+        }],
+        authenticatorSelection: {
+            authenticatorAttachment: "platform",
+            requireResidentKey: true,
+            userVerification: "required"
+        },
+        attestation: "direct",
+        extensions: {}
+    };
+
+    var challengeResponseAttestationNoneMsgB64Url = {
+        "rawId": "AAii3V6sGoaozW7TbNaYlJaJ5br8TrBfRXnofZO6l2suc3a5tt_XFuFkFA_5eabU80S1PW0m4IZ79BS2kQO7Zcuy2vf0ESg18GTLG1mo5YSkIdqL2J44egt-6rcj7NedSEwxa_uuxUYBtHNnSQqDmtoUAfM9LSWLl65BjKVZNGUp9ao33mMSdVfQQ0bHze69JVQvLBf8OTiZUqJsOuKmpqUc",
+        "response": {
+            "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVkBJkmWDeWIDoxodDQXD2R2YFuP5K65ooYyx5lc87qDHZdjQQAAAAAAAAAAAAAAAAAAAAAAAAAAAKIACKLdXqwahqjNbtNs1piUlonluvxOsF9Feeh9k7qXay5zdrm239cW4WQUD_l5ptTzRLU9bSbghnv0FLaRA7tly7La9_QRKDXwZMsbWajlhKQh2ovYnjh6C37qtyPs151ITDFr-67FRgG0c2dJCoOa2hQB8z0tJYuXrkGMpVk0ZSn1qjfeYxJ1V9BDRsfN7r0lVC8sF_w5OJlSomw64qampRylAQIDJiABIVgguxHN3W6ehp0VWXKaMNie1J82MVJCFZYScau74o17cx8iWCDb1jkTLi7lYZZbgwUwpqAk8QmIiPMTVQUVkhGEyGrKww==",
+            "clientDataJSON": "eyJjaGFsbGVuZ2UiOiIzM0VIYXYtaloxdjlxd0g3ODNhVS1qMEFSeDZyNW8tWUhoLXdkN0M2alBiZDdXaDZ5dGJJWm9zSUlBQ2Vod2Y5LXM2aFhoeVNITy1ISFVqRXdaUzI5dyIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
+        }
+    };
+
     var challengeResponseAttestationNoneMsg = {
         body: {
             "binaryEncoding": "base64",
@@ -280,7 +345,30 @@
         }
     };
 
-    // TODO: needs update
+    var getOptionsRequest = {
+        username: "bubba",
+        displayName: "Bubba Smith"
+    };
+
+    var basicGetOptions = {
+        status: "ok",
+        challenge: "sP4MiwodjreC8-80IMjcyWNlo_Y1SJXmFgQNBilnjdf30WRsjFDhDYmfY4-4uhq2HFjYREbXdr6Vjuvz2XvTjA=="
+    };
+
+    var completeGetOptions = {
+        status: "ok",
+        challenge: "sP4MiwodjreC8-80IMjcyWNlo_Y1SJXmFgQNBilnjdf30WRsjFDhDYmfY4-4uhq2HFjYREbXdr6Vjuvz2XvTjA==",
+        timeout: 60000,
+        rpId: "My RP",
+        allowCredentials: [{
+            type: "public-key",
+            id: "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA-fPKUVYNGE2XYcjhihtYODQv-xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx-rbq_RMUbaJ-HoGVt-c820ifdoagkFR02Van8Vr9q67Bn6zHNDT_DNrQbtpIUqqX_Rg2p5o6F7bVO3uOJG9hUNgUb",
+            transports: ["usb", "nfc", "ble"]
+        }],
+        userVerification: "discouraged",
+        extensions: {}
+    };
+
     var challengeResponseAttestationU2fMsg = {
         body: {
             "binaryEncoding": "base64",
@@ -293,17 +381,15 @@
         }
     };
 
-    // var challengeResponseAttestationPackedMsg = {
-    //     body: {
-    //         "binaryEncoding": "base64",
-    //         "username": "adam",
-    //         "id": "Bo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IirQ==",
-    //         "response": {
-    //             "attestationObject": null,
-    //             "clientDataJson": ctap2ClientData
-    //         }
-    //     }
-    // };
+    var assertionResponseMsgB64Url = {
+        "rawId": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA-fPKUVYNGE2XYcjhihtYODQv-xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx-rbq_RMUbaJ-HoGVt-c820ifdoagkFR02Van8Vr9q67Bn6zHNDT_DNrQbtpIUqqX_Rg2p5o6F7bVO3uOJG9hUNgUb",
+        "response": {
+            "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJlYVR5VU5ueVBERGRLOFNORWdURVV2ejFROGR5bGtqalRpbVlkNVg3UUFvLUY4X1oxbHNKaTNCaWxVcEZaSGtJQ05EV1k4cjlpdm5UZ1c3LVhaQzNxUSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uZ2V0In0=",
+            "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABaw==",
+            "signature": "MEYCIQD6dF3B0ZoaLA0r78oyRdoMNR0bN93Zi4cF_75hFAH6pQIhALY0UIsrh03u_f4yKOwzwD6Cj3_GWLJiioTT9580s1a7",
+            "userHandle": ""
+        }
+    };
 
     var assertionResponseMsg = {
         body: {
@@ -320,8 +406,16 @@
 
     var server = {
         challengeRequestMsg,
+        creationOptionsRequest,
+        basicCreationOptions,
+        completeCreationOptions,
+        getOptionsRequest,
+        challengeResponseAttestationNoneMsgB64Url,
         challengeResponseAttestationNoneMsg,
         challengeResponseAttestationU2fMsg,
+        basicGetOptions,
+        completeGetOptions,
+        assertionResponseMsgB64Url,
         assertionResponseMsg
     };
 
