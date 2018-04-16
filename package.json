@@ -1,6 +1,6 @@
 {
   "name": "fido2-helpers",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Helpers for testing FIDO 2.0 / WebAuthn / CTAP",
   "main": "fido2-helpers.js",
   "scripts": {
@@ -9,7 +9,6 @@
   "keywords": [
     "webauthn",
     "fido2",
-    "ctap",
     "fido 2.0"
   ],
   "author": "Adam Powers",
