@@ -260,7 +260,7 @@
      *********************************************************************************
      *********************************************************************************/
 
-    var challengeRequestMsg = {
+    var challengeRequestMsg = { // TODO: obsolete
         username: "bubba"
     };
 
@@ -387,7 +387,7 @@
             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJlYVR5VU5ueVBERGRLOFNORWdURVV2ejFROGR5bGtqalRpbVlkNVg3UUFvLUY4X1oxbHNKaTNCaWxVcEZaSGtJQ05EV1k4cjlpdm5UZ1c3LVhaQzNxUSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uZ2V0In0=",
             "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABaw==",
             "signature": "MEYCIQD6dF3B0ZoaLA0r78oyRdoMNR0bN93Zi4cF_75hFAH6pQIhALY0UIsrh03u_f4yKOwzwD6Cj3_GWLJiioTT9580s1a7",
-            "userHandle": ""
+            "userHandle": null
         }
     };
 
@@ -404,6 +404,16 @@
         }
     };
 
+    var successServerResponse = {
+        status: "ok",
+        errorMessage: ""
+    };
+
+    var errorServerResponse = {
+        status: "failed",
+        errorMessage: "out of memory"
+    };
+
     var server = {
         challengeRequestMsg,
         creationOptionsRequest,
@@ -416,7 +426,9 @@
         basicGetOptions,
         completeGetOptions,
         assertionResponseMsgB64Url,
-        assertionResponseMsg
+        assertionResponseMsg,
+        successServerResponse,
+        errorServerResponse
     };
 
     /********************************************************************************
@@ -427,6 +439,7 @@
 
     var makeCredentialAttestationNoneResponse = {
         username: challengeResponseAttestationNoneMsg.body.username,
+        rawId: challengeResponseAttestationNoneMsg.body.id,
         id: challengeResponseAttestationNoneMsg.body.id,
         response: {
             attestationObject: b64decode(challengeResponseAttestationNoneMsg.body.response.attestationObject),
@@ -436,6 +449,7 @@
 
     var makeCredentialAttestationU2fResponse = {
         username: challengeResponseAttestationU2fMsg.body.username,
+        rawId: challengeResponseAttestationU2fMsg.body.id,
         id: challengeResponseAttestationU2fMsg.body.id,
         response: {
             attestationObject: b64decode(challengeResponseAttestationU2fMsg.body.response.attestationObject),
@@ -444,6 +458,7 @@
     };
 
     var assertionResponse = {
+        rawId: assertionResponseMsg.body.id,
         id: assertionResponseMsg.body.id,
         response: {
             clientDataJSON: b64decode(assertionResponseMsg.body.response.clientDataJSON),
