@@ -443,8 +443,8 @@
 
     var makeCredentialAttestationNoneResponse = {
         username: challengeResponseAttestationNoneMsg.body.username,
-        rawId: coerceToArrayBuffer(challengeResponseAttestationNoneMsg.body.id),
-        id: coerceToArrayBuffer(challengeResponseAttestationNoneMsg.body.id),
+        rawId: b64decode(challengeResponseAttestationNoneMsg.body.id),
+        id: b64decode(challengeResponseAttestationNoneMsg.body.id),
         response: {
             attestationObject: b64decode(challengeResponseAttestationNoneMsg.body.response.attestationObject),
             clientDataJSON: b64decode(challengeResponseAttestationNoneMsg.body.response.clientDataJSON)
@@ -453,8 +453,8 @@
 
     var makeCredentialAttestationU2fResponse = {
         username: challengeResponseAttestationU2fMsg.body.username,
-        rawId: coerceToArrayBuffer(challengeResponseAttestationU2fMsg.body.id),
-        id: coerceToArrayBuffer(challengeResponseAttestationU2fMsg.body.id),
+        rawId: b64decode(challengeResponseAttestationU2fMsg.body.id),
+        id: b64decode(challengeResponseAttestationU2fMsg.body.id),
         response: {
             attestationObject: b64decode(challengeResponseAttestationU2fMsg.body.response.attestationObject),
             clientDataJSON: b64decode(challengeResponseAttestationU2fMsg.body.response.clientDataJSON)
@@ -462,8 +462,8 @@
     };
 
     var assertionResponse = {
-        rawId: coerceToArrayBuffer(assertionResponseMsg.body.rawId),
-        id: coerceToArrayBuffer(assertionResponseMsg.body.id),
+        rawId: b64decode(assertionResponseMsg.body.rawId),
+        id: b64decode(assertionResponseMsg.body.id),
         response: {
             clientDataJSON: b64decode(assertionResponseMsg.body.response.clientDataJSON),
             authenticatorData: b64decode(assertionResponseMsg.body.response.authenticatorData),
