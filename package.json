@@ -1,6 +1,6 @@
 {
   "name": "fido2-helpers",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Helpers for testing FIDO 2.0 / WebAuthn / CTAP",
   "main": "fido2-helpers.js",
   "scripts": {
