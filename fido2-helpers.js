@@ -123,6 +123,11 @@
     }
 
     function b64decode(base64) {
+        if (typeof base64 !== "string") {
+            throw new TypeError("exepcted base64 to be string, got: " + base64);
+        }
+
+        base64 = base64.replace(/-/g, "+").replace(/_/g, "/");
         var bufferLength = base64.length * 0.75,
             len = base64.length,
             i, p = 0,
@@ -395,6 +400,17 @@
         }
     };
 
+    var challengeResponseAttestationU2fHypersecuB64UrlMsg = {
+        "rawId": "HRiuOZKJ6yNnBrSnocnFuGgsjcAZICl4-0uEDAQHCIXncWQCkYUBvvUzZQovrxmeB9Qm23hmj6PnzWyoiWtt8w",
+        "id": "HRiuOZKJ6yNnBrSnocnFuGgsjcAZICl4-0uEDAQHCIXncWQCkYUBvvUzZQovrxmeB9Qm23hmj6PnzWyoiWtt8w",
+        "response":
+            {
+                "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJwU0c5ejZHZDVtNDhXV3c5ZTAzQUppeGJLaWEweW5FcW03b185S0VrUFkwemNhWGhqbXhvQ2hDNVFSbks0RTZYSVQyUUZjX3VHeWNPNWxVTXlnZVpndyIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vd2ViYXV0aG4ub3JnIiwidHlwZSI6IndlYmF1dGhuLmNyZWF0ZSJ9",
+                "attestationObject": "o2NmbXRoZmlkby11MmZnYXR0U3RtdKJjc2lnWEgwRgIhANsxYs-ntdvXjEaGTl-T91fmoSQCCzLEmXpzwuIqSrzUAiEA2vnx_cP4Ck9ASruZ7NdCtHKleCfd0NwCHcv2cMj175JjeDVjgVkBQDCCATwwgeSgAwIBAgIKOVGHiTh4UmRUCTAKBggqhkjOPQQDAjAXMRUwEwYDVQQDEwxGVCBGSURPIDAxMDAwHhcNMTQwODE0MTgyOTMyWhcNMjQwODE0MTgyOTMyWjAxMS8wLQYDVQQDEyZQaWxvdEdudWJieS0wLjQuMS0zOTUxODc4OTM4Nzg1MjY0NTQwOTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABIeOKoi1TAiEYdCsb8XIAncH9Ko9EuGkXEugACIy1mV0fefgs7ZA4hnz5X3CS67eUWgMASZzpwKHVybohhppKGAwCgYIKoZIzj0EAwIDRwAwRAIg6BuIpLPxP_wPNiOJZJiqKKKlBUB2CgCwMYibSjki5S8CIOPFCx-Y1JKxbJ7nDs96PsvjDcRfpynzvswDG_V6VuK0aGF1dGhEYXRhWMSVaQiPHs7jIylUA129ENfK45EwWidRtVm7j9fLsim91EEAAAAAAAAAAAAAAAAAAAAAAAAAAABAHRiuOZKJ6yNnBrSnocnFuGgsjcAZICl4-0uEDAQHCIXncWQCkYUBvvUzZQovrxmeB9Qm23hmj6PnzWyoiWtt86UBAgMmIAEhWCCHjiqItUwIhGHQrG_FyAJ3B_SqPRLhpFxLoAAiMtZldCJYIH3n4LO2QOIZ8-V9wkuu3lFoDAEmc6cCh1cm6IYaaShg"
+            }
+
+    };
+
     var assertionResponseMsgB64Url = {
         "rawId": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA-fPKUVYNGE2XYcjhihtYODQv-xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx-rbq_RMUbaJ-HoGVt-c820ifdoagkFR02Van8Vr9q67Bn6zHNDT_DNrQbtpIUqqX_Rg2p5o6F7bVO3uOJG9hUNgUb",
         "id": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA-fPKUVYNGE2XYcjhihtYODQv-xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx-rbq_RMUbaJ-HoGVt-c820ifdoagkFR02Van8Vr9q67Bn6zHNDT_DNrQbtpIUqqX_Rg2p5o6F7bVO3uOJG9hUNgUb",
@@ -439,6 +455,7 @@
         challengeResponseAttestationNoneMsgB64Url,
         challengeResponseAttestationNoneMsg,
         challengeResponseAttestationU2fMsgB64Url,
+        challengeResponseAttestationU2fHypersecuB64UrlMsg,
         challengeResponseAttestationU2fMsg,
         basicGetOptions,
         completeGetOptions,
@@ -474,6 +491,14 @@
         }
     };
 
+    var makeCredentialAttestationHypersecuU2fResponse = {
+        rawId: b64decode(challengeResponseAttestationU2fHypersecuB64UrlMsg.rawId),
+        response: {
+            attestationObject: b64decode(challengeResponseAttestationU2fHypersecuB64UrlMsg.response.attestationObject),
+            clientDataJSON: b64decode(challengeResponseAttestationU2fHypersecuB64UrlMsg.response.clientDataJSON)
+        }
+    };
+
     var assertionResponse = {
         rawId: b64decode(assertionResponseMsg.body.rawId),
         id: b64decode(assertionResponseMsg.body.id),
@@ -494,6 +519,7 @@
     var lib = {
         makeCredentialAttestationNoneResponse,
         makeCredentialAttestationU2fResponse,
+        makeCredentialAttestationHypersecuU2fResponse,
         assertionResponse,
         assnPublicKey
     };
