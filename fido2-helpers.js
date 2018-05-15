@@ -118,7 +118,7 @@
 
     // Use a lookup table to find the index.
     var lookup = new Uint8Array(256);
-    for (var i = 0; i < chars.length; i++) {
+    for (let i = 0; i < chars.length; i++) {
         lookup[chars.charCodeAt(i)] = i;
     }
 
@@ -185,12 +185,35 @@
     function bufEqual(a, b) {
         var len = a.length;
 
+        if (!(a instanceof Buffer) ||
+            !(b instanceof Buffer)) {
+            throw new TypeError("bad args: expected Buffers");
+        }
+
         if (len !== b.length) {
             return false;
         }
 
-        for (var i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
             if (a.readUInt8(i) !== b.readUInt8(i)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function abEqual(a, b) {
+        var len = a.byteLength;
+
+        if (len !== b.byteLength) {
+            return false;
+        }
+
+        a = new Uint8Array(a);
+        b = new Uint8Array(b);
+        for (let i = 0; i < len; i++) {
+            if (a[i] !== b[i]) {
                 return false;
             }
         }
@@ -240,6 +263,7 @@
         b64encode,
         ab2str,
         bufEqual,
+        abEqual,
         cloneObject,
         coerceToArrayBuffer
     };
@@ -339,18 +363,18 @@
         }
     };
 
-    var challengeResponseAttestationNoneMsg = {
-        body: {
-            "binaryEncoding": "base64",
-            "username": "adam",
-            "rawId": "AAii3V6sGoaozW7TbNaYlJaJ5br8TrBfRXnofZO6l2suc3a5tt/XFuFkFA/5eabU80S1PW0m4IZ79BS2kQO7Zcuy2vf0ESg18GTLG1mo5YSkIdqL2J44egt+6rcj7NedSEwxa/uuxUYBtHNnSQqDmtoUAfM9LSWLl65BjKVZNGUp9ao33mMSdVfQQ0bHze69JVQvLBf8OTiZUqJsOuKmpqUc",
-            "id": "AAii3V6sGoaozW7TbNaYlJaJ5br8TrBfRXnofZO6l2suc3a5tt/XFuFkFA/5eabU80S1PW0m4IZ79BS2kQO7Zcuy2vf0ESg18GTLG1mo5YSkIdqL2J44egt+6rcj7NedSEwxa/uuxUYBtHNnSQqDmtoUAfM9LSWLl65BjKVZNGUp9ao33mMSdVfQQ0bHze69JVQvLBf8OTiZUqJsOuKmpqUc",
-            "response": {
-                "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVkBJkmWDeWIDoxodDQXD2R2YFuP5K65ooYyx5lc87qDHZdjQQAAAAAAAAAAAAAAAAAAAAAAAAAAAKIACKLdXqwahqjNbtNs1piUlonluvxOsF9Feeh9k7qXay5zdrm239cW4WQUD/l5ptTzRLU9bSbghnv0FLaRA7tly7La9/QRKDXwZMsbWajlhKQh2ovYnjh6C37qtyPs151ITDFr+67FRgG0c2dJCoOa2hQB8z0tJYuXrkGMpVk0ZSn1qjfeYxJ1V9BDRsfN7r0lVC8sF/w5OJlSomw64qampRylAQIDJiABIVgguxHN3W6ehp0VWXKaMNie1J82MVJCFZYScau74o17cx8iWCDb1jkTLi7lYZZbgwUwpqAk8QmIiPMTVQUVkhGEyGrKww==",
-                "clientDataJSON": "eyJjaGFsbGVuZ2UiOiIzM0VIYXYtaloxdjlxd0g3ODNhVS1qMEFSeDZyNW8tWUhoLXdkN0M2alBiZDdXaDZ5dGJJWm9zSUlBQ2Vod2Y5LXM2aFhoeVNITy1ISFVqRXdaUzI5dyIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
-            }
-        }
-    };
+    // var challengeResponseAttestationNoneMsg = {
+    //     body: {
+    //         "binaryEncoding": "base64",
+    //         "username": "adam",
+    //         "rawId": "AAii3V6sGoaozW7TbNaYlJaJ5br8TrBfRXnofZO6l2suc3a5tt/XFuFkFA/5eabU80S1PW0m4IZ79BS2kQO7Zcuy2vf0ESg18GTLG1mo5YSkIdqL2J44egt+6rcj7NedSEwxa/uuxUYBtHNnSQqDmtoUAfM9LSWLl65BjKVZNGUp9ao33mMSdVfQQ0bHze69JVQvLBf8OTiZUqJsOuKmpqUc",
+    //         "id": "AAii3V6sGoaozW7TbNaYlJaJ5br8TrBfRXnofZO6l2suc3a5tt/XFuFkFA/5eabU80S1PW0m4IZ79BS2kQO7Zcuy2vf0ESg18GTLG1mo5YSkIdqL2J44egt+6rcj7NedSEwxa/uuxUYBtHNnSQqDmtoUAfM9LSWLl65BjKVZNGUp9ao33mMSdVfQQ0bHze69JVQvLBf8OTiZUqJsOuKmpqUc",
+    //         "response": {
+    //             "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVkBJkmWDeWIDoxodDQXD2R2YFuP5K65ooYyx5lc87qDHZdjQQAAAAAAAAAAAAAAAAAAAAAAAAAAAKIACKLdXqwahqjNbtNs1piUlonluvxOsF9Feeh9k7qXay5zdrm239cW4WQUD/l5ptTzRLU9bSbghnv0FLaRA7tly7La9/QRKDXwZMsbWajlhKQh2ovYnjh6C37qtyPs151ITDFr+67FRgG0c2dJCoOa2hQB8z0tJYuXrkGMpVk0ZSn1qjfeYxJ1V9BDRsfN7r0lVC8sF/w5OJlSomw64qampRylAQIDJiABIVgguxHN3W6ehp0VWXKaMNie1J82MVJCFZYScau74o17cx8iWCDb1jkTLi7lYZZbgwUwpqAk8QmIiPMTVQUVkhGEyGrKww==",
+    //             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiIzM0VIYXYtaloxdjlxd0g3ODNhVS1qMEFSeDZyNW8tWUhoLXdkN0M2alBiZDdXaDZ5dGJJWm9zSUlBQ2Vod2Y5LXM2aFhoeVNITy1ISFVqRXdaUzI5dyIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
+    //         }
+    //     }
+    // };
 
     var getOptionsRequest = {
         username: "bubba",
@@ -382,23 +406,23 @@
         "rawId": "Bo-VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd-GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT_e698IirQ==",
         "id": "Bo-VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd-GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT_e698IirQ==",
         "response": {
-            "attestationObject": "o2NmbXRoZmlkby11MmZnYXR0U3RtdKJjc2lnWEgwRgIhAO-683ISJhKdmUPmVbQuYZsp8lkD7YJcInHS3QOfbrioAiEAzgMJ499cBczBw826r1m55Jmd9mT4d1iEXYS8FbIn8MpjeDVjgVkCSDCCAkQwggEuoAMCAQICBFVivqAwCwYJKoZIhvcNAQELMC4xLDAqBgNVBAMTI1l1YmljbyBVMkYgUm9vdCBDQSBTZXJpYWwgNDU3MjAwNjMxMCAXDTE0MDgwMTAwMDAwMFoYDzIwNTAwOTA0MDAwMDAwWjAqMSgwJgYDVQQDDB9ZdWJpY28gVTJGIEVFIFNlcmlhbCAxNDMyNTM0Njg4MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESzMfdz2BRLmZXL5FhVF-F1g6pHYjaVy-haxILIAZ8sm5RnrgRbDmbxMbLqMkPJH9pgLjGPP8XY0qerrnK9FDCaM7MDkwIgYJKwYBBAGCxAoCBBUxLjMuNi4xLjQuMS40MTQ4Mi4xLjUwEwYLKwYBBAGC5RwCAQEEBAMCBSAwCwYJKoZIhvcNAQELA4IBAQCsFtmzbrazqbdtdZSzT1n09z7byf3rKTXra0Ucq_QdJdPnFhTXRyYEynKleOMj7bdgBGhfBefRub4F226UQPrFz8kypsr66FKZdy7bAnggIDzUFB0-629qLOmeOVeAMmOrq41uxICn3whK0sunt9bXfJTD68CxZvlgV8r1_jpjHqJqQzdio2-z0z0RQliX9WvEEmqfIvHaJpmWemvXejw1ywoglF0xQ4Gq39qB5CDe22zKr_cvKg1y7sJDvHw2Z4Iab_p5WdkxCMObAV3KbAQ3g7F-czkyRwoJiGOqAgau5aRUewWclryqNled5W8qiJ6m5RDIMQnYZyq-FTZgpjXaGF1dGhEYXRhWMRJlg3liA6MaHQ0Fw9kdmBbj-SuuaKGMseZXPO6gx2XY0EAAAAAAAAAAAAAAAAAAAAAAAAAAABABo-VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd-GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT_e698IiraUBAgMmIAEhWCA1c9AIeH5sN6x1Q-2qR7v255tkeGbWs0ECCDw35kJGBCJYIBjTUxruadjFFMnWlR5rPJr23sBJT9qexY9PCc9o8hmT",
+            "attestationObject": "o2NmbXRoZmlkby11MmZnYXR0U3RtdKJjc2lnWEgwRgIhAO-683ISJhKdmUPmVbQuYZsp8lkD7YJcInHS3QOfbrioAiEAzgMJ499cBczBw826r1m55Jmd9mT4d1iEXYS8FbIn8MpjeDVjgVkCSDCCAkQwggEuoAMCAQICBFVivqAwCwYJKoZIhvcNAQELMC4xLDAqBgNVBAMTI1l1YmljbyBVMkYgUm9vdCBDQSBTZXJpYWwgNDU3MjAwNjMxMCAXDTE0MDgwMTAwMDAwMFoYDzIwNTAwOTA0MDAwMDAwWjAqMSgwJgYDVQQDDB9ZdWJpY28gVTJGIEVFIFNlcmlhbCAxNDMyNTM0Njg4MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESzMfdz2BRLmZXL5FhVF-F1g6pHYjaVy-haxILIAZ8sm5RnrgRbDmbxMbLqMkPJH9pgLjGPP8XY0qerrnK9FDCaM7MDkwIgYJKwYBBAGCxAoCBBUxLjMuNi4xLjQuMS40MTQ4Mi4xLjUwEwYLKwYBBAGC5RwCAQEEBAMCBSAwCwYJKoZIhvcNAQELA4IBAQCsFtmzbrazqbdtdZSzT1n09z7byf3rKTXra0Ucq_QdJdPnFhTXRyYEynKleOMj7bdgBGhfBefRub4F226UQPrFz8kypsr66FKZdy7bAnggIDzUFB0-629qLOmeOVeAMmOrq41uxICn3whK0sunt9bXfJTD68CxZvlgV8r1_jpjHqJqQzdio2--z0z0RQliX9WvEEmqfIvHaJpmWemvXejw1ywoglF0xQ4Gq39qB5CDe22zKr_cvKg1y7sJDvHw2Z4Iab_p5WdkxCMObAV3KbAQ3g7F-czkyRwoJiGOqAgau5aRUewWclryqNled5W8qiJ6m5RDIMQnYZyq-FTZgpjXaGF1dGhEYXRhWMRJlg3liA6MaHQ0Fw9kdmBbj-SuuaKGMseZXPO6gx2XY0EAAAAAAAAAAAAAAAAAAAAAAAAAAABABo-VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd-GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT_e698IiraUBAgMmIAEhWCA1c9AIeH5sN6x1Q-2qR7v255tkeGbWs0ECCDw35kJGBCJYIBjTUxruadjFFMnWlR5rPJr23sBJT9qexY9PCc9o8hmT",
             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJWdTh1RHFua3dPamQ4M0tMajZTY24yQmdGTkxGYkdSN0txX1hKSndRbm5hdHp0VVI3WElCTDdLOHVNUENJYVFtS3cxTUNWUTVhYXpOSkZrN05ha2dxQSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
         }
     };
 
-    var challengeResponseAttestationU2fMsg = {
-        body: {
-            "binaryEncoding": "base64",
-            "username": "adam",
-            "rawId": "Bo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IirQ==",
-            "id": "Bo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IirQ==",
-            "response": {
-                "attestationObject": "o2NmbXRoZmlkby11MmZnYXR0U3RtdKJjc2lnWEgwRgIhAO+683ISJhKdmUPmVbQuYZsp8lkD7YJcInHS3QOfbrioAiEAzgMJ499cBczBw826r1m55Jmd9mT4d1iEXYS8FbIn8MpjeDVjgVkCSDCCAkQwggEuoAMCAQICBFVivqAwCwYJKoZIhvcNAQELMC4xLDAqBgNVBAMTI1l1YmljbyBVMkYgUm9vdCBDQSBTZXJpYWwgNDU3MjAwNjMxMCAXDTE0MDgwMTAwMDAwMFoYDzIwNTAwOTA0MDAwMDAwWjAqMSgwJgYDVQQDDB9ZdWJpY28gVTJGIEVFIFNlcmlhbCAxNDMyNTM0Njg4MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESzMfdz2BRLmZXL5FhVF+F1g6pHYjaVy+haxILIAZ8sm5RnrgRbDmbxMbLqMkPJH9pgLjGPP8XY0qerrnK9FDCaM7MDkwIgYJKwYBBAGCxAoCBBUxLjMuNi4xLjQuMS40MTQ4Mi4xLjUwEwYLKwYBBAGC5RwCAQEEBAMCBSAwCwYJKoZIhvcNAQELA4IBAQCsFtmzbrazqbdtdZSzT1n09z7byf3rKTXra0Ucq/QdJdPnFhTXRyYEynKleOMj7bdgBGhfBefRub4F226UQPrFz8kypsr66FKZdy7bAnggIDzUFB0+629qLOmeOVeAMmOrq41uxICn3whK0sunt9bXfJTD68CxZvlgV8r1/jpjHqJqQzdio2++z0z0RQliX9WvEEmqfIvHaJpmWemvXejw1ywoglF0xQ4Gq39qB5CDe22zKr/cvKg1y7sJDvHw2Z4Iab/p5WdkxCMObAV3KbAQ3g7F+czkyRwoJiGOqAgau5aRUewWclryqNled5W8qiJ6m5RDIMQnYZyq+FTZgpjXaGF1dGhEYXRhWMRJlg3liA6MaHQ0Fw9kdmBbj+SuuaKGMseZXPO6gx2XY0EAAAAAAAAAAAAAAAAAAAAAAAAAAABABo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IiraUBAgMmIAEhWCA1c9AIeH5sN6x1Q+2qR7v255tkeGbWs0ECCDw35kJGBCJYIBjTUxruadjFFMnWlR5rPJr23sBJT9qexY9PCc9o8hmT",
-                "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJWdTh1RHFua3dPamQ4M0tMajZTY24yQmdGTkxGYkdSN0txX1hKSndRbm5hdHp0VVI3WElCTDdLOHVNUENJYVFtS3cxTUNWUTVhYXpOSkZrN05ha2dxQSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
-            }
-        }
-    };
+    // var challengeResponseAttestationU2fMsg = {
+    //     body: {
+    //         "binaryEncoding": "base64",
+    //         "username": "adam",
+    //         "rawId": "Bo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IirQ==",
+    //         "id": "Bo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IirQ==",
+    //         "response": {
+    //             "attestationObject": "o2NmbXRoZmlkby11MmZnYXR0U3RtdKJjc2lnWEgwRgIhAO+683ISJhKdmUPmVbQuYZsp8lkD7YJcInHS3QOfbrioAiEAzgMJ499cBczBw826r1m55Jmd9mT4d1iEXYS8FbIn8MpjeDVjgVkCSDCCAkQwggEuoAMCAQICBFVivqAwCwYJKoZIhvcNAQELMC4xLDAqBgNVBAMTI1l1YmljbyBVMkYgUm9vdCBDQSBTZXJpYWwgNDU3MjAwNjMxMCAXDTE0MDgwMTAwMDAwMFoYDzIwNTAwOTA0MDAwMDAwWjAqMSgwJgYDVQQDDB9ZdWJpY28gVTJGIEVFIFNlcmlhbCAxNDMyNTM0Njg4MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESzMfdz2BRLmZXL5FhVF+F1g6pHYjaVy+haxILIAZ8sm5RnrgRbDmbxMbLqMkPJH9pgLjGPP8XY0qerrnK9FDCaM7MDkwIgYJKwYBBAGCxAoCBBUxLjMuNi4xLjQuMS40MTQ4Mi4xLjUwEwYLKwYBBAGC5RwCAQEEBAMCBSAwCwYJKoZIhvcNAQELA4IBAQCsFtmzbrazqbdtdZSzT1n09z7byf3rKTXra0Ucq/QdJdPnFhTXRyYEynKleOMj7bdgBGhfBefRub4F226UQPrFz8kypsr66FKZdy7bAnggIDzUFB0+629qLOmeOVeAMmOrq41uxICn3whK0sunt9bXfJTD68CxZvlgV8r1/jpjHqJqQzdio2++z0z0RQliX9WvEEmqfIvHaJpmWemvXejw1ywoglF0xQ4Gq39qB5CDe22zKr/cvKg1y7sJDvHw2Z4Iab/p5WdkxCMObAV3KbAQ3g7F+czkyRwoJiGOqAgau5aRUewWclryqNled5W8qiJ6m5RDIMQnYZyq+FTZgpjXaGF1dGhEYXRhWMRJlg3liA6MaHQ0Fw9kdmBbj+SuuaKGMseZXPO6gx2XY0EAAAAAAAAAAAAAAAAAAAAAAAAAAABABo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IiraUBAgMmIAEhWCA1c9AIeH5sN6x1Q+2qR7v255tkeGbWs0ECCDw35kJGBCJYIBjTUxruadjFFMnWlR5rPJr23sBJT9qexY9PCc9o8hmT",
+    //             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJWdTh1RHFua3dPamQ4M0tMajZTY24yQmdGTkxGYkdSN0txX1hKSndRbm5hdHp0VVI3WElCTDdLOHVNUENJYVFtS3cxTUNWUTVhYXpOSkZrN05ha2dxQSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
+    //         }
+    //     }
+    // };
 
     var challengeResponseAttestationU2fHypersecuB64UrlMsg = {
         "rawId": "HRiuOZKJ6yNnBrSnocnFuGgsjcAZICl4-0uEDAQHCIXncWQCkYUBvvUzZQovrxmeB9Qm23hmj6PnzWyoiWtt8w",
@@ -411,6 +435,15 @@
 
     };
 
+    var challengeResponseAttestationPackedB64UrlMsg = {
+        "rawId": "sL39APyTmisrjh11vghaqNfuruLQmCfR0c1ryKtaQ81jkEhNa5u9xLTnkibvXC9YpzBLFwWEZ3k9CR_sxzm_pWYbBOtKxeZu9z2GT8b6QW4iQvRlyumCT3oENx_8401r",
+        "id": "sL39APyTmisrjh11vghaqNfuruLQmCfR0c1ryKtaQ81jkEhNa5u9xLTnkibvXC9YpzBLFwWEZ3k9CR_sxzm_pWYbBOtKxeZu9z2GT8b6QW4iQvRlyumCT3oENx_8401r",
+        "response": {
+            "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJ1Vlg4OElnUmEwU1NyTUlSVF9xN2NSY2RmZ2ZSQnhDZ25fcGtwVUFuWEpLMnpPYjMwN3dkMU9MWFEwQXVOYU10QlIzYW1rNkhZenAtX1Z4SlRQcHdHdyIsIm9yaWdpbiI6Imh0dHBzOi8vd2ViYXV0aG4ub3JnIiwidG9rZW5CaW5kaW5nIjp7InN0YXR1cyI6Im5vdC1zdXBwb3J0ZWQifSwidHlwZSI6IndlYmF1dGhuLmNyZWF0ZSJ9",
+            "attestationObject": "o2NmbXRmcGFja2VkZ2F0dFN0bXSjY2FsZyZjc2lnWEgwRgIhAIsK0Wr9tmud-waIYoQw20UWi7DL_gDx_PNG3PB57eHLAiEAtRyd-4JI2pCVX-dDz4mbHc_AkvC3d_4qnBBa3n2I_hVjeDVjg1kCRTCCAkEwggHooAMCAQICEBWfe8LNiRjxKGuTSPqfM-IwCgYIKoZIzj0EAwIwSTELMAkGA1UEBhMCQ04xHTAbBgNVBAoMFEZlaXRpYW4gVGVjaG5vbG9naWVzMRswGQYDVQQDDBJGZWl0aWFuIEZJRE8yIENBLTEwIBcNMTgwNDExMDAwMDAwWhgPMjAzMzA0MTAyMzU5NTlaMG8xCzAJBgNVBAYTAkNOMR0wGwYDVQQKDBRGZWl0aWFuIFRlY2hub2xvZ2llczEiMCAGA1UECwwZQXV0aGVudGljYXRvciBBdHRlc3RhdGlvbjEdMBsGA1UEAwwURlQgQmlvUGFzcyBGSURPMiBVU0IwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASABnVcWfvJSbAVqNIKkliXvoMKsu_oLPiP7aCQlmPlSMcfEScFM7QkRnidTP7hAUOKlOmDPeIALC8qHddvTdtdo4GJMIGGMB0GA1UdDgQWBBR6VIJCgGLYiuevhJglxK-RqTSY8jAfBgNVHSMEGDAWgBRNO9jEZxUbuxPo84TYME-daRXAgzAMBgNVHRMBAf8EAjAAMBMGCysGAQQBguUcAgEBBAQDAgUgMCEGCysGAQQBguUcAQEEBBIEEEI4MkVENzNDOEZCNEU1QTIwCgYIKoZIzj0EAwIDRwAwRAIgJEtFo76I3LfgJaLGoxLP-4btvCdKIsEFLjFIUfDosIcCIDQav04cJPILGnPVPazCqfkVtBuyOmsBbx_v-ODn-JDAWQH_MIIB-zCCAaCgAwIBAgIQFZ97ws2JGPEoa5NI-p8z4TAKBggqhkjOPQQDAjBLMQswCQYDVQQGEwJDTjEdMBsGA1UECgwURmVpdGlhbiBUZWNobm9sb2dpZXMxHTAbBgNVBAMMFEZlaXRpYW4gRklETyBSb290IENBMCAXDTE4MDQxMDAwMDAwMFoYDzIwMzgwNDA5MjM1OTU5WjBJMQswCQYDVQQGEwJDTjEdMBsGA1UECgwURmVpdGlhbiBUZWNobm9sb2dpZXMxGzAZBgNVBAMMEkZlaXRpYW4gRklETzIgQ0EtMTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABI5-YAnswRZlzKD6w-lv5Qg7lW1XJRHrWzL01mc5V91n2LYXNR3_S7mA5gupuTO5mjQw8xfqIRMHVr1qB3TedY-jZjBkMB0GA1UdDgQWBBRNO9jEZxUbuxPo84TYME-daRXAgzAfBgNVHSMEGDAWgBTRoZhNgX_DuWv2B2e9UBL-kEXxVDASBgNVHRMBAf8ECDAGAQH_AgEAMA4GA1UdDwEB_wQEAwIBBjAKBggqhkjOPQQDAgNJADBGAiEA-3-j0kBHoRFQwnhWbSHMkBaY7KF_TztINFN5ymDkwmUCIQDrCkPBiMHXvYg-kSRgVsKwuVtYonRvC588qRwpLStZ7FkB3DCCAdgwggF-oAMCAQICEBWfe8LNiRjxKGuTSPqfM9YwCgYIKoZIzj0EAwIwSzELMAkGA1UEBhMCQ04xHTAbBgNVBAoMFEZlaXRpYW4gVGVjaG5vbG9naWVzMR0wGwYDVQQDDBRGZWl0aWFuIEZJRE8gUm9vdCBDQTAgFw0xODA0MDEwMDAwMDBaGA8yMDQ4MDMzMTIzNTk1OVowSzELMAkGA1UEBhMCQ04xHTAbBgNVBAoMFEZlaXRpYW4gVGVjaG5vbG9naWVzMR0wGwYDVQQDDBRGZWl0aWFuIEZJRE8gUm9vdCBDQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJ3wCm47zF9RMtW-pPlkEHTVTLfSYBlsidz7zOAUiuV6k36PvtKAI_-LZ8MiC9BxQUfUrfpLY6klw344lwLq7POjQjBAMB0GA1UdDgQWBBTRoZhNgX_DuWv2B2e9UBL-kEXxVDAPBgNVHRMBAf8EBTADAQH_MA4GA1UdDwEB_wQEAwIBBjAKBggqhkjOPQQDAgNIADBFAiEAt7E9ZQYxnhfsSk6c1dSmFNnJGoU3eJiycs2DoWh7-IoCIA9iWJH8h-UOAaaPK66DtCLe6GIxdpIMv3kmd1PRpWqsaGF1dGhEYXRhWOSVaQiPHs7jIylUA129ENfK45EwWidRtVm7j9fLsim91EEAAAABQjgyRUQ3M0M4RkI0RTVBMgBgsL39APyTmisrjh11vghaqNfuruLQmCfR0c1ryKtaQ81jkEhNa5u9xLTnkibvXC9YpzBLFwWEZ3k9CR_sxzm_pWYbBOtKxeZu9z2GT8b6QW4iQvRlyumCT3oENx_8401rpQECAyYgASFYIFkdweEE6mWiIAYPDoKz3881Aoa4sn8zkTm0aPKKYBvdIlggtlG32lxrang8M0tojYJ36CL1VMv2pZSzqR_NfvG88bA"
+        }
+    };
+
     var assertionResponseMsgB64Url = {
         "rawId": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA-fPKUVYNGE2XYcjhihtYODQv-xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx-rbq_RMUbaJ-HoGVt-c820ifdoagkFR02Van8Vr9q67Bn6zHNDT_DNrQbtpIUqqX_Rg2p5o6F7bVO3uOJG9hUNgUb",
         "id": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA-fPKUVYNGE2XYcjhihtYODQv-xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx-rbq_RMUbaJ-HoGVt-c820ifdoagkFR02Van8Vr9q67Bn6zHNDT_DNrQbtpIUqqX_Rg2p5o6F7bVO3uOJG9hUNgUb",
@@ -418,23 +451,23 @@
             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJlYVR5VU5ueVBERGRLOFNORWdURVV2ejFROGR5bGtqalRpbVlkNVg3UUFvLUY4X1oxbHNKaTNCaWxVcEZaSGtJQ05EV1k4cjlpdm5UZ1c3LVhaQzNxUSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uZ2V0In0=",
             "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABaw==",
             "signature": "MEYCIQD6dF3B0ZoaLA0r78oyRdoMNR0bN93Zi4cF_75hFAH6pQIhALY0UIsrh03u_f4yKOwzwD6Cj3_GWLJiioTT9580s1a7",
-            "userHandle": null
+            "userHandle": ""
         }
     };
 
-    var assertionResponseMsg = {
-        body: {
-            "binaryEncoding": "base64",
-            "rawId": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA+fPKUVYNGE2XYcjhihtYODQv+xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx+rbq/RMUbaJ+HoGVt+c820ifdoagkFR02Van8Vr9q67Bn6zHNDT/DNrQbtpIUqqX/Rg2p5o6F7bVO3uOJG9hUNgUb",
-            "id": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA+fPKUVYNGE2XYcjhihtYODQv+xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx+rbq/RMUbaJ+HoGVt+c820ifdoagkFR02Van8Vr9q67Bn6zHNDT/DNrQbtpIUqqX/Rg2p5o6F7bVO3uOJG9hUNgUb",
-            "response": {
-                "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJlYVR5VU5ueVBERGRLOFNORWdURVV2ejFROGR5bGtqalRpbVlkNVg3UUFvLUY4X1oxbHNKaTNCaWxVcEZaSGtJQ05EV1k4cjlpdm5UZ1c3LVhaQzNxUSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uZ2V0In0=",
-                "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4/krrmihjLHmVzzuoMdl2MBAAABaw==",
-                "signature": "MEYCIQD6dF3B0ZoaLA0r78oyRdoMNR0bN93Zi4cF/75hFAH6pQIhALY0UIsrh03u/f4yKOwzwD6Cj3/GWLJiioTT9580s1a7",
-                "userHandle": ""
-            }
-        }
-    };
+    // var assertionResponseMsg = {
+    //     body: {
+    //         "binaryEncoding": "base64",
+    //         "rawId": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA+fPKUVYNGE2XYcjhihtYODQv+xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx+rbq/RMUbaJ+HoGVt+c820ifdoagkFR02Van8Vr9q67Bn6zHNDT/DNrQbtpIUqqX/Rg2p5o6F7bVO3uOJG9hUNgUb",
+    //         "id": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA+fPKUVYNGE2XYcjhihtYODQv+xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx+rbq/RMUbaJ+HoGVt+c820ifdoagkFR02Van8Vr9q67Bn6zHNDT/DNrQbtpIUqqX/Rg2p5o6F7bVO3uOJG9hUNgUb",
+    //         "response": {
+    //             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJlYVR5VU5ueVBERGRLOFNORWdURVV2ejFROGR5bGtqalRpbVlkNVg3UUFvLUY4X1oxbHNKaTNCaWxVcEZaSGtJQ05EV1k4cjlpdm5UZ1c3LVhaQzNxUSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uZ2V0In0=",
+    //             "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4/krrmihjLHmVzzuoMdl2MBAAABaw==",
+    //             "signature": "MEYCIQD6dF3B0ZoaLA0r78oyRdoMNR0bN93Zi4cF/75hFAH6pQIhALY0UIsrh03u/f4yKOwzwD6Cj3/GWLJiioTT9580s1a7",
+    //             "userHandle": ""
+    //         }
+    //     }
+    // };
 
     var successServerResponse = {
         status: "ok",
@@ -453,14 +486,15 @@
         completeCreationOptions,
         getOptionsRequest,
         challengeResponseAttestationNoneMsgB64Url,
-        challengeResponseAttestationNoneMsg,
+        // challengeResponseAttestationNoneMsg,
         challengeResponseAttestationU2fMsgB64Url,
         challengeResponseAttestationU2fHypersecuB64UrlMsg,
-        challengeResponseAttestationU2fMsg,
+        challengeResponseAttestationPackedB64UrlMsg,
+        // challengeResponseAttestationU2fMsg,
         basicGetOptions,
         completeGetOptions,
         assertionResponseMsgB64Url,
-        assertionResponseMsg,
+        // assertionResponseMsg,
         successServerResponse,
         errorServerResponse
     };
@@ -471,23 +505,60 @@
      *********************************************************************************
      *********************************************************************************/
 
+    // var makeCredentialAttestationNoneResponse = {
+    //     username: challengeResponseAttestationNoneMsg.body.username,
+    //     rawId: b64decode(challengeResponseAttestationNoneMsg.body.id),
+    //     id: b64decode(challengeResponseAttestationNoneMsg.body.id),
+    //     response: {
+    //         attestationObject: b64decode(challengeResponseAttestationNoneMsg.body.response.attestationObject),
+    //         clientDataJSON: b64decode(challengeResponseAttestationNoneMsg.body.response.clientDataJSON)
+    //     }
+    // };
+
+    // var makeCredentialAttestationU2fResponse = {
+    //     username: challengeResponseAttestationU2fMsg.body.username,
+    //     rawId: b64decode(challengeResponseAttestationU2fMsg.body.id),
+    //     id: b64decode(challengeResponseAttestationU2fMsg.body.id),
+    //     response: {
+    //         attestationObject: b64decode(challengeResponseAttestationU2fMsg.body.response.attestationObject),
+    //         clientDataJSON: b64decode(challengeResponseAttestationU2fMsg.body.response.clientDataJSON)
+    //     }
+    // };
+
+    // var makeCredentialAttestationHypersecuU2fResponse = {
+    //     rawId: b64decode(challengeResponseAttestationU2fHypersecuB64UrlMsg.rawId),
+    //     response: {
+    //         attestationObject: b64decode(challengeResponseAttestationU2fHypersecuB64UrlMsg.response.attestationObject),
+    //         clientDataJSON: b64decode(challengeResponseAttestationU2fHypersecuB64UrlMsg.response.clientDataJSON)
+    //     }
+    // };
+
+    // var assertionResponse = {
+    //     rawId: b64decode(assertionResponseMsg.body.rawId),
+    //     id: b64decode(assertionResponseMsg.body.id),
+    //     response: {
+    //         clientDataJSON: b64decode(assertionResponseMsg.body.response.clientDataJSON),
+    //         authenticatorData: b64decode(assertionResponseMsg.body.response.authenticatorData),
+    //         signature: b64decode(assertionResponseMsg.body.response.signature),
+    //         userHandle: b64decode(assertionResponseMsg.body.response.userHandle)
+    //     }
+    // };
+
     var makeCredentialAttestationNoneResponse = {
-        username: challengeResponseAttestationNoneMsg.body.username,
-        rawId: b64decode(challengeResponseAttestationNoneMsg.body.id),
-        id: b64decode(challengeResponseAttestationNoneMsg.body.id),
+        username: challengeResponseAttestationNoneMsgB64Url.username,
+        rawId: b64decode(challengeResponseAttestationNoneMsgB64Url.rawId),
         response: {
-            attestationObject: b64decode(challengeResponseAttestationNoneMsg.body.response.attestationObject),
-            clientDataJSON: b64decode(challengeResponseAttestationNoneMsg.body.response.clientDataJSON)
+            attestationObject: b64decode(challengeResponseAttestationNoneMsgB64Url.response.attestationObject),
+            clientDataJSON: b64decode(challengeResponseAttestationNoneMsgB64Url.response.clientDataJSON)
         }
     };
 
     var makeCredentialAttestationU2fResponse = {
-        username: challengeResponseAttestationU2fMsg.body.username,
-        rawId: b64decode(challengeResponseAttestationU2fMsg.body.id),
-        id: b64decode(challengeResponseAttestationU2fMsg.body.id),
+        username: challengeResponseAttestationU2fMsgB64Url.username,
+        rawId: b64decode(challengeResponseAttestationU2fMsgB64Url.rawId),
         response: {
-            attestationObject: b64decode(challengeResponseAttestationU2fMsg.body.response.attestationObject),
-            clientDataJSON: b64decode(challengeResponseAttestationU2fMsg.body.response.clientDataJSON)
+            attestationObject: b64decode(challengeResponseAttestationU2fMsgB64Url.response.attestationObject),
+            clientDataJSON: b64decode(challengeResponseAttestationU2fMsgB64Url.response.clientDataJSON)
         }
     };
 
@@ -499,14 +570,21 @@
         }
     };
 
-    var assertionResponse = {
-        rawId: b64decode(assertionResponseMsg.body.rawId),
-        id: b64decode(assertionResponseMsg.body.id),
+    var makeCredentialAttestationPackedResponse = {
+        rawId: b64decode(challengeResponseAttestationPackedB64UrlMsg.rawId),
         response: {
-            clientDataJSON: b64decode(assertionResponseMsg.body.response.clientDataJSON),
-            authenticatorData: b64decode(assertionResponseMsg.body.response.authenticatorData),
-            signature: b64decode(assertionResponseMsg.body.response.signature),
-            userHandle: b64decode(assertionResponseMsg.body.response.userHandle)
+            attestationObject: b64decode(challengeResponseAttestationPackedB64UrlMsg.response.attestationObject),
+            clientDataJSON: b64decode(challengeResponseAttestationPackedB64UrlMsg.response.clientDataJSON)
+        }
+    };
+
+    var assertionResponse = {
+        rawId: b64decode(assertionResponseMsgB64Url.rawId),
+        response: {
+            clientDataJSON: b64decode(assertionResponseMsgB64Url.response.clientDataJSON),
+            authenticatorData: b64decode(assertionResponseMsgB64Url.response.authenticatorData),
+            signature: b64decode(assertionResponseMsgB64Url.response.signature),
+            userHandle: assertionResponseMsgB64Url.response.userHandle
         }
     };
 
@@ -520,6 +598,7 @@
         makeCredentialAttestationNoneResponse,
         makeCredentialAttestationU2fResponse,
         makeCredentialAttestationHypersecuU2fResponse,
+        makeCredentialAttestationPackedResponse,
         assertionResponse,
         assnPublicKey
     };
@@ -624,11 +703,51 @@
         0x45, 0x73
     ]).buffer;
 
+    var feitianFido2 = new Uint8Array([
+        0x30, 0x82, 0x02, 0x41, 0x30, 0x82, 0x01, 0xE8, 0xA0, 0x03, 0x02, 0x01, 0x02, 0x02, 0x10, 0x15,
+        0x9F, 0x7B, 0xC2, 0xCD, 0x89, 0x18, 0xF1, 0x28, 0x6B, 0x93, 0x48, 0xFA, 0x9F, 0x33, 0xE2, 0x30,
+        0x0A, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x30, 0x49, 0x31, 0x0B, 0x30,
+        0x09, 0x06, 0x03, 0x55, 0x04, 0x06, 0x13, 0x02, 0x43, 0x4E, 0x31, 0x1D, 0x30, 0x1B, 0x06, 0x03,
+        0x55, 0x04, 0x0A, 0x0C, 0x14, 0x46, 0x65, 0x69, 0x74, 0x69, 0x61, 0x6E, 0x20, 0x54, 0x65, 0x63,
+        0x68, 0x6E, 0x6F, 0x6C, 0x6F, 0x67, 0x69, 0x65, 0x73, 0x31, 0x1B, 0x30, 0x19, 0x06, 0x03, 0x55,
+        0x04, 0x03, 0x0C, 0x12, 0x46, 0x65, 0x69, 0x74, 0x69, 0x61, 0x6E, 0x20, 0x46, 0x49, 0x44, 0x4F,
+        0x32, 0x20, 0x43, 0x41, 0x2D, 0x31, 0x30, 0x20, 0x17, 0x0D, 0x31, 0x38, 0x30, 0x34, 0x31, 0x31,
+        0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x5A, 0x18, 0x0F, 0x32, 0x30, 0x33, 0x33, 0x30, 0x34, 0x31,
+        0x30, 0x32, 0x33, 0x35, 0x39, 0x35, 0x39, 0x5A, 0x30, 0x6F, 0x31, 0x0B, 0x30, 0x09, 0x06, 0x03,
+        0x55, 0x04, 0x06, 0x13, 0x02, 0x43, 0x4E, 0x31, 0x1D, 0x30, 0x1B, 0x06, 0x03, 0x55, 0x04, 0x0A,
+        0x0C, 0x14, 0x46, 0x65, 0x69, 0x74, 0x69, 0x61, 0x6E, 0x20, 0x54, 0x65, 0x63, 0x68, 0x6E, 0x6F,
+        0x6C, 0x6F, 0x67, 0x69, 0x65, 0x73, 0x31, 0x22, 0x30, 0x20, 0x06, 0x03, 0x55, 0x04, 0x0B, 0x0C,
+        0x19, 0x41, 0x75, 0x74, 0x68, 0x65, 0x6E, 0x74, 0x69, 0x63, 0x61, 0x74, 0x6F, 0x72, 0x20, 0x41,
+        0x74, 0x74, 0x65, 0x73, 0x74, 0x61, 0x74, 0x69, 0x6F, 0x6E, 0x31, 0x1D, 0x30, 0x1B, 0x06, 0x03,
+        0x55, 0x04, 0x03, 0x0C, 0x14, 0x46, 0x54, 0x20, 0x42, 0x69, 0x6F, 0x50, 0x61, 0x73, 0x73, 0x20,
+        0x46, 0x49, 0x44, 0x4F, 0x32, 0x20, 0x55, 0x53, 0x42, 0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2A,
+        0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x03, 0x01, 0x07,
+        0x03, 0x42, 0x00, 0x04, 0x80, 0x06, 0x75, 0x5C, 0x59, 0xFB, 0xC9, 0x49, 0xB0, 0x15, 0xA8, 0xD2,
+        0x0A, 0x92, 0x58, 0x97, 0xBE, 0x83, 0x0A, 0xB2, 0xEF, 0xE8, 0x2C, 0xF8, 0x8F, 0xED, 0xA0, 0x90,
+        0x96, 0x63, 0xE5, 0x48, 0xC7, 0x1F, 0x11, 0x27, 0x05, 0x33, 0xB4, 0x24, 0x46, 0x78, 0x9D, 0x4C,
+        0xFE, 0xE1, 0x01, 0x43, 0x8A, 0x94, 0xE9, 0x83, 0x3D, 0xE2, 0x00, 0x2C, 0x2F, 0x2A, 0x1D, 0xD7,
+        0x6F, 0x4D, 0xDB, 0x5D, 0xA3, 0x81, 0x89, 0x30, 0x81, 0x86, 0x30, 0x1D, 0x06, 0x03, 0x55, 0x1D,
+        0x0E, 0x04, 0x16, 0x04, 0x14, 0x7A, 0x54, 0x82, 0x42, 0x80, 0x62, 0xD8, 0x8A, 0xE7, 0xAF, 0x84,
+        0x98, 0x25, 0xC4, 0xAF, 0x91, 0xA9, 0x34, 0x98, 0xF2, 0x30, 0x1F, 0x06, 0x03, 0x55, 0x1D, 0x23,
+        0x04, 0x18, 0x30, 0x16, 0x80, 0x14, 0x4D, 0x3B, 0xD8, 0xC4, 0x67, 0x15, 0x1B, 0xBB, 0x13, 0xE8,
+        0xF3, 0x84, 0xD8, 0x30, 0x4F, 0x9D, 0x69, 0x15, 0xC0, 0x83, 0x30, 0x0C, 0x06, 0x03, 0x55, 0x1D,
+        0x13, 0x01, 0x01, 0xFF, 0x04, 0x02, 0x30, 0x00, 0x30, 0x13, 0x06, 0x0B, 0x2B, 0x06, 0x01, 0x04,
+        0x01, 0x82, 0xE5, 0x1C, 0x02, 0x01, 0x01, 0x04, 0x04, 0x03, 0x02, 0x05, 0x20, 0x30, 0x21, 0x06,
+        0x0B, 0x2B, 0x06, 0x01, 0x04, 0x01, 0x82, 0xE5, 0x1C, 0x01, 0x01, 0x04, 0x04, 0x12, 0x04, 0x10,
+        0x42, 0x38, 0x32, 0x45, 0x44, 0x37, 0x33, 0x43, 0x38, 0x46, 0x42, 0x34, 0x45, 0x35, 0x41, 0x32,
+        0x30, 0x0A, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x03, 0x47, 0x00, 0x30,
+        0x44, 0x02, 0x20, 0x24, 0x4B, 0x45, 0xA3, 0xBE, 0x88, 0xDC, 0xB7, 0xE0, 0x25, 0xA2, 0xC6, 0xA3,
+        0x12, 0xCF, 0xFB, 0x86, 0xED, 0xBC, 0x27, 0x4A, 0x22, 0xC1, 0x05, 0x2E, 0x31, 0x48, 0x51, 0xF0,
+        0xE8, 0xB0, 0x87, 0x02, 0x20, 0x34, 0x1A, 0xBF, 0x4E, 0x1C, 0x24, 0xF2, 0x0B, 0x1A, 0x73, 0xD5,
+        0x3D, 0xAC, 0xC2, 0xA9, 0xF9, 0x15, 0xB4, 0x1B, 0xB2, 0x3A, 0x6B, 0x01, 0x6F, 0x1F, 0xEF, 0xF8,
+        0xE0, 0xE7, 0xF8, 0x90, 0xC0,
+    ]).buffer;
 
 
     var certs = {
         yubiKeyAttestation,
-        yubicoRoot
+        yubicoRoot,
+        feitianFido2
     };
 
     /********************************************************************************
