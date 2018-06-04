@@ -289,10 +289,6 @@
      *********************************************************************************
      *********************************************************************************/
 
-    // var challengeRequestMsg = { // TODO: obsolete
-    //     username: "bubba"
-    // };
-
     var creationOptionsRequest = {
         username: "bubba",
         displayName: "Bubba Smith",
@@ -363,19 +359,6 @@
         }
     };
 
-    // var challengeResponseAttestationNoneMsg = {
-    //     body: {
-    //         "binaryEncoding": "base64",
-    //         "username": "adam",
-    //         "rawId": "AAii3V6sGoaozW7TbNaYlJaJ5br8TrBfRXnofZO6l2suc3a5tt/XFuFkFA/5eabU80S1PW0m4IZ79BS2kQO7Zcuy2vf0ESg18GTLG1mo5YSkIdqL2J44egt+6rcj7NedSEwxa/uuxUYBtHNnSQqDmtoUAfM9LSWLl65BjKVZNGUp9ao33mMSdVfQQ0bHze69JVQvLBf8OTiZUqJsOuKmpqUc",
-    //         "id": "AAii3V6sGoaozW7TbNaYlJaJ5br8TrBfRXnofZO6l2suc3a5tt/XFuFkFA/5eabU80S1PW0m4IZ79BS2kQO7Zcuy2vf0ESg18GTLG1mo5YSkIdqL2J44egt+6rcj7NedSEwxa/uuxUYBtHNnSQqDmtoUAfM9LSWLl65BjKVZNGUp9ao33mMSdVfQQ0bHze69JVQvLBf8OTiZUqJsOuKmpqUc",
-    //         "response": {
-    //             "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVkBJkmWDeWIDoxodDQXD2R2YFuP5K65ooYyx5lc87qDHZdjQQAAAAAAAAAAAAAAAAAAAAAAAAAAAKIACKLdXqwahqjNbtNs1piUlonluvxOsF9Feeh9k7qXay5zdrm239cW4WQUD/l5ptTzRLU9bSbghnv0FLaRA7tly7La9/QRKDXwZMsbWajlhKQh2ovYnjh6C37qtyPs151ITDFr+67FRgG0c2dJCoOa2hQB8z0tJYuXrkGMpVk0ZSn1qjfeYxJ1V9BDRsfN7r0lVC8sF/w5OJlSomw64qampRylAQIDJiABIVgguxHN3W6ehp0VWXKaMNie1J82MVJCFZYScau74o17cx8iWCDb1jkTLi7lYZZbgwUwpqAk8QmIiPMTVQUVkhGEyGrKww==",
-    //             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiIzM0VIYXYtaloxdjlxd0g3ODNhVS1qMEFSeDZyNW8tWUhoLXdkN0M2alBiZDdXaDZ5dGJJWm9zSUlBQ2Vod2Y5LXM2aFhoeVNITy1ISFVqRXdaUzI5dyIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
-    //         }
-    //     }
-    // };
-
     var getOptionsRequest = {
         username: "bubba",
         displayName: "Bubba Smith"
@@ -401,7 +384,7 @@
     };
 
     var challengeResponseAttestationU2fMsgB64Url = {
-        "binaryEncoding": "base64",
+        // "binaryEncoding": "base64",
         "username": "adam",
         "rawId": "Bo-VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd-GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT_e698IirQ==",
         "id": "Bo-VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd-GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT_e698IirQ==",
@@ -410,19 +393,6 @@
             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJWdTh1RHFua3dPamQ4M0tMajZTY24yQmdGTkxGYkdSN0txX1hKSndRbm5hdHp0VVI3WElCTDdLOHVNUENJYVFtS3cxTUNWUTVhYXpOSkZrN05ha2dxQSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
         }
     };
-
-    // var challengeResponseAttestationU2fMsg = {
-    //     body: {
-    //         "binaryEncoding": "base64",
-    //         "username": "adam",
-    //         "rawId": "Bo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IirQ==",
-    //         "id": "Bo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IirQ==",
-    //         "response": {
-    //             "attestationObject": "o2NmbXRoZmlkby11MmZnYXR0U3RtdKJjc2lnWEgwRgIhAO+683ISJhKdmUPmVbQuYZsp8lkD7YJcInHS3QOfbrioAiEAzgMJ499cBczBw826r1m55Jmd9mT4d1iEXYS8FbIn8MpjeDVjgVkCSDCCAkQwggEuoAMCAQICBFVivqAwCwYJKoZIhvcNAQELMC4xLDAqBgNVBAMTI1l1YmljbyBVMkYgUm9vdCBDQSBTZXJpYWwgNDU3MjAwNjMxMCAXDTE0MDgwMTAwMDAwMFoYDzIwNTAwOTA0MDAwMDAwWjAqMSgwJgYDVQQDDB9ZdWJpY28gVTJGIEVFIFNlcmlhbCAxNDMyNTM0Njg4MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAESzMfdz2BRLmZXL5FhVF+F1g6pHYjaVy+haxILIAZ8sm5RnrgRbDmbxMbLqMkPJH9pgLjGPP8XY0qerrnK9FDCaM7MDkwIgYJKwYBBAGCxAoCBBUxLjMuNi4xLjQuMS40MTQ4Mi4xLjUwEwYLKwYBBAGC5RwCAQEEBAMCBSAwCwYJKoZIhvcNAQELA4IBAQCsFtmzbrazqbdtdZSzT1n09z7byf3rKTXra0Ucq/QdJdPnFhTXRyYEynKleOMj7bdgBGhfBefRub4F226UQPrFz8kypsr66FKZdy7bAnggIDzUFB0+629qLOmeOVeAMmOrq41uxICn3whK0sunt9bXfJTD68CxZvlgV8r1/jpjHqJqQzdio2++z0z0RQliX9WvEEmqfIvHaJpmWemvXejw1ywoglF0xQ4Gq39qB5CDe22zKr/cvKg1y7sJDvHw2Z4Iab/p5WdkxCMObAV3KbAQ3g7F+czkyRwoJiGOqAgau5aRUewWclryqNled5W8qiJ6m5RDIMQnYZyq+FTZgpjXaGF1dGhEYXRhWMRJlg3liA6MaHQ0Fw9kdmBbj+SuuaKGMseZXPO6gx2XY0EAAAAAAAAAAAAAAAAAAAAAAAAAAABABo+VjHOkJZy8DjnCJnIc0Oxt9QAz5upMdSJxNbd+GyAo6MNIvPBb9YsUlE0ZJaaWXtWH5FQyPS6bT/e698IiraUBAgMmIAEhWCA1c9AIeH5sN6x1Q+2qR7v255tkeGbWs0ECCDw35kJGBCJYIBjTUxruadjFFMnWlR5rPJr23sBJT9qexY9PCc9o8hmT",
-    //             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJWdTh1RHFua3dPamQ4M0tMajZTY24yQmdGTkxGYkdSN0txX1hKSndRbm5hdHp0VVI3WElCTDdLOHVNUENJYVFtS3cxTUNWUTVhYXpOSkZrN05ha2dxQSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIn0="
-    //         }
-    //     }
-    // };
 
     var challengeResponseAttestationU2fHypersecuB64UrlMsg = {
         "rawId": "HRiuOZKJ6yNnBrSnocnFuGgsjcAZICl4-0uEDAQHCIXncWQCkYUBvvUzZQovrxmeB9Qm23hmj6PnzWyoiWtt8w",
@@ -445,12 +415,14 @@
     };
 
     var challengeResponseAttestationTpmB64UrlMsg = {
-        "rawId": "KK6ZOVG_MLTg34o7FKjEpOnpW458Z6s0heLT42_FhgE",
-        response: {
-            "clientDataJSON": "ew0KCSJ0eXBlIiA6ICJ3ZWJhdXRobi5jcmVhdGUiLA0KCSJjaGFsbGVuZ2UiIDogImpBb21feUtSd2VtNVRpNFhHcGhxYzNHZFEwalZwMm9WZmppVVVuZVhELTk1VUdoeDJ1N3V1WlREd2hWblpTWWk0X09yTzNndTFXLUJKdUttQVgxMFVBIiwNCgkib3JpZ2luIiA6ICJodHRwOi8vbG9jYWxob3N0OjgwODAiDQp9",
-            "attestationObject": "o2NmbXRjdHBtaGF1dGhEYXRhWQFnSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAAiYcFjK3EuBtuEw3lDcvpYAICiumTlRvzC04N-KOxSoxKTp6VuOfGerNIXi0-NvxYYBpAEDAzkBACBZAQCbZnH43W26t15SumZhb_-bgM4sS7eTSPdhLQkWotCymPXzLWY0_dgAdmKjyX1uBDnQGC4ZpF_4Y8RBHTMJXdld4dA4rLDcZXb0ibERAZFUJFm9LTUeG4KtNL4CeQVd2AduLFHnQTMHQFUQ6g3v7Wj0TTUNhiiunlRBveW2Wq0ZHGtIm3RUl_UPKQaTkzFaWfVZtQuwDak0WoRwDGptbSlbN_r3EahdikI454BDZ6Wl_WOt8gC4TIMWDG5WOWyiS1w_QFkva-7tAGoHq1WiF_74kuaBUSr-NfboFiLaATJmINDhWVP8qqRj-MrEPgYefdEdo0NRMLq9XLeZ5NnBfX4XIUMBAAFnYXR0U3RtdKZjdmVyYzIuMGNhbGc5AQVjc2lnWQEAV6awZ5ZoB_fpHZvATDbHkrGUm_5LHZKCqINHfOkTjywM8gkwak4VEalfS6QppVSxkblokaxrPRK5zUwLBrc9Gwq5_3ph3DFJidEPJVcx5Z0r-YvGGxheS5goBfUD4OnmhTCBYfyHlVpgcK2-G7xfMZNbqeTvLku033trZ_7-rnrL5QL7bSpR4x9W6SNohdmUmpBlghijeEoYNVlfDpyLc3vJ8yESryuui0lGwDZiS2PlmBgxYPZw5wZynm4s4Oh8dN5iVHoo4bpuEY8c9qNPlEIdWZu72wwAvqJC70jiCbxElfvi223pcDvUvqFgqTEGeZL4SDM1ZWg5A-5euPAqHWN4NWOCWQSiMIIEnjCCA4agAwIBAgIQL7RbTvD3QMOAUdc2F8018jANBgkqhkiG9w0BAQsFADBBMT8wPQYDVQQDEzZOQ1UtSUZYLUtleUlkLTQwQjg2ODJCOEQxODQ1MEEyQjA2ODQ5RDlCNUNEOTZGNENEREY0QkUwHhcNMTgwMzE5MjIxNjUwWhcNMjgwMzE5MjIxNjUwWjAAMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAklyX9jgSez7tYsp5Kq2E1p--9wS1EbQwn7KH0qJwwIfsJ3tmx-I2OWUj_--pIQ9ag-1v_46P4Bhi_eHgANsi0nktmH-NEFaF7EDKDtZ_Qe52rSCsA7LdF2riRoS305YrfbXn3HeRnGEcRPZkCOhtZVAIz2SoJBzqFdTCcMGACneXS2olcOm3SpAqY1zgednhveahtPaUVYnpv1yei5E82kAmAwB9Wxqx_yK0i4DRQqW0nVdW4INfch913ph-BFWijZIieShCaLv25JkkyPYJXugXt9H71eV91CfE_vshf0tP_7o_ZA7fir_1rIdNFFdpurvI708K1ce2mIgj_V3dtwIDAQABo4IB0TCCAc0wDgYDVR0PAQH_BAQDAgeAMAwGA1UdEwEB_wQCMAAwbQYDVR0gAQH_BGMwYTBfBgkrBgEEAYI3FR8wUjBQBggrBgEFBQcCAjBEHkIAVABDAFAAQQAgACAAVAByAHUAcwB0AGUAZAAgACAAUABsAGEAdABmAG8AcgBtACAAIABJAGQAZQBuAHQAaQB0AHkwEAYDVR0lBAkwBwYFZ4EFCAMwUQYDVR0RAQH_BEcwRaRDMEExFjAUBgVngQUCAQwLaWQ6NDk0NjU4MDAxEzARBgVngQUCAgwIU0xCIDk2NjUxEjAQBgVngQUCAwwHaWQ6MDUyODAfBgNVHSMEGDAWgBRNDeeaLngPuj0cMQN-_a6ODsOwpzAdBgNVHQ4EFgQUwdMSw0PYqzB1qkNjLACqzVUeR1QwgZgGCCsGAQUFBwEBBIGLMIGIMIGFBggrBgEFBQcwAoZ5aHR0cDovL2F6Y3Nwcm9kbmN1YWlrcHVibGlzaC5ibG9iLmNvcmUud2luZG93cy5uZXQvbmN1LWlmeC1rZXlpZC00MGI4NjgyYjhkMTg0NTBhMmIwNjg0OWQ5YjVjZDk2ZjRjZGRmNGJlL2NlcnRpZmljYXRlLmNlcjANBgkqhkiG9w0BAQsFAAOCAQEAskH81SG3Qx2fAwZ3rMaAm0b1Js6ZY0qsWNmiU7vWAkpJQvHY-B2lA_45sm04LWbFFXN_C6j7frRqXqqQ1vcIbMrBCK12PcbVKaUaWRB8swTHmyPw6psnRxj91nfwk9txZGOVVLFZKQjaYLmjvfiQbFeEEyUyqUQQyAFdfP5Ll4MsaWv3TW9TMKqDuo1eMJdr2S9iCD59PO-msmeVsKEoIatiMdTH0OHMp42VKggf8Wi3NMqlumVQMeI5eF3hlmDLxaWvSGWBuRBbOGrKrBLBPnwzob4ST4fBZiu7dkG_NgBrzpPu-DYEMx1LzZRNeI3T7lg-O1FWweGIYDT6rL-g1FkF7DCCBegwggPQoAMCAQICEzMAAABeeXRJAWOoj0MAAAAAAF4wDQYJKoZIhvcNAQELBQAwgYwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xNjA0BgNVBAMTLU1pY3Jvc29mdCBUUE0gUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgMjAxNDAeFw0xNTA2MTYyMDU4MDdaFw0yOTEyMzEyMDU4MDdaMEExPzA9BgNVBAMTNk5DVS1JRlgtS2V5SWQtNDBCODY4MkI4RDE4NDUwQTJCMDY4NDlEOUI1Q0Q5NkY0Q0RERjRCRTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALOOhnrn6ue3u6k2YiaQutyglYDGUh-f7UDQIHGPQkt3FUJI3Tuf5R91MUlHCof_Blm5mIFY3i5ahPmzeenoJinZqOVWY1laIQpNtzlbyVjOZOGgPowz5NWweloQPZyRFBh9rchPziiGXtF0AKX4VOMdYR0NNt7J41BpsOxAcfmFJ3bzJuAR9adxPP7gzZulXBu2szhwEe94btRD6eWx82xFrN2dfqVTBsQMTy3684GG99tRMpzUlYNO-HbsvdTcVMm1dHgcQjP-ZwPGNzhdP5Eh1NTMp9irSUrhIPo7m06yVsqoOStNYoFLStCSaH-0rGoecL9xoKc5zWHtS3Kiw30CAwEAAaOCAYswggGHMAsGA1UdDwQEAwIBhjAbBgNVHSUEFDASBgkrBgEEAYI3FSQGBWeBBQgDMBYGA1UdIAQPMA0wCwYJKwYBBAGCNxUfMBIGA1UdEwEB_wQIMAYBAf8CAQAwHQYDVR0OBBYEFE0N55oueA-6PRwxA379ro4Ow7CnMB8GA1UdIwQYMBaAFHqMCs4vSGIX4pTRrlXBUuxxdKRWMHAGA1UdHwRpMGcwZaBjoGGGX2h0dHA6Ly93d3cubWljcm9zb2Z0LmNvbS9wa2lvcHMvY3JsL01pY3Jvc29mdCUyMFRQTSUyMFJvb3QlMjBDZXJ0aWZpY2F0ZSUyMEF1dGhvcml0eSUyMDIwMTQuY3JsMH0GCCsGAQUFBwEBBHEwbzBtBggrBgEFBQcwAoZhaHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraW9wcy9jZXJ0cy9NaWNyb3NvZnQlMjBUUE0lMjBSb290JTIwQ2VydGlmaWNhdGUlMjBBdXRob3JpdHklMjAyMDE0LmNydDANBgkqhkiG9w0BAQsFAAOCAgEABl6ARAnYNizWIQVB8SYgiXADGU0azZRa4Z4sglVMULGH2IXNacUV8ksaZHL8bLSeRfplXFXPGbOI-BxCC568wPTyMLzmJh5vUlJo9QPPCAjJFaC-EbHDF4DmzbNwVS8HBRunW5kYQNyEkKORuJkuH6ymFz-rb20wiCDOYM0UxqOuJzmxNxWdaQsF4fKQRiykm3texCneAYOL8IeN75GywP5GXv8W4woM9Go8_JxbSflDN9e3Xe-S6j9dwosqhYtaiye5j0enmxIgFrr4ivTQ_TaLnwTjDvgplnifZ5nZSjEgT1CdCalJxYg0mVUU0CJCYq2UAdAO-r0j9waw2Ek3BXQGKn8N1Kxb5dZJU1itV82su8mpISFc36pKI_t_1mZvMgfT1BhpMlMcaEvARU6bwP5y1JaerJhMxr7JDIpkjYJTNJ3mN1uBr30Z2atLTdBx3GOkkoNzctxJcl4fypIHa8XV8EhDoaplx8Ez7PJxf6GK4BFf8l5Igc8hHs-htsVuekLOGg26I50-pUs0XLnPY68il2wjx1FIgH-Cgr9iQL0lZ32g5ocFO6V2cyLk38zDDHWOJViZSF7BefqWsZmbuT9RWBihO2u9u7R1uu6-sE8Jz746v91-W-V3t0LKIHfsErGZZDhc5V9HSJuqIiN5a5EtbWWdTXnDalyWl7-ZJaloY2VydEluZm9Yof9UQ0eAFwAiAAv4qtJpXBB49uJcLe7qHYC1lqYDIbiSU796hQJ_1lOwvAAUvkpQjxSY2gFyFtzBg3rE8t6hT7MAAAAAA1IVdkVdPID3QDntAByzleIEAdgWACIAC9co6YX3AoGs-G77ahk0PhPYCYRbN7c3eTfQXWn-1JSgACIAC7nbBNmsxi6-7h1PWTN-g_iQGCmBg4v7JNqV5K-A-1z2Z3B1YkFyZWFZATYAAQALAAYEcgAgnf_L82w4OuaZ-5ho3G3LidcVOIS-KAOSLBJBWL-tIq4AEAAQCAAAAAAAAQCbZnH43W26t15SumZhb_-bgM4sS7eTSPdhLQkWotCymPXzLWY0_dgAdmKjyX1uBDnQGC4ZpF_4Y8RBHTMJXdld4dA4rLDcZXb0ibERAZFUJFm9LTUeG4KtNL4CeQVd2AduLFHnQTMHQFUQ6g3v7Wj0TTUNhiiunlRBveW2Wq0ZHGtIm3RUl_UPKQaTkzFaWfVZtQuwDak0WoRwDGptbSlbN_r3EahdikI454BDZ6Wl_WOt8gC4TIMWDG5WOWyiS1w_QFkva-7tAGoHq1WiF_74kuaBUSr-NfboFiLaATJmINDhWVP8qqRj-MrEPgYefdEdo0NRMLq9XLeZ5NnBfX4X"
+        "rawId": "hWzdFiPbOMQ5KNBsMhs-Zeh8F0iTHrH63YKkrxJFgjQ",
+        "id": "hWzdFiPbOMQ5KNBsMhs-Zeh8F0iTHrH63YKkrxJFgjQ",
+        "response": {
+            "clientDataJSON": "ew0KCSJ0eXBlIiA6ICJ3ZWJhdXRobi5jcmVhdGUiLA0KCSJjaGFsbGVuZ2UiIDogIndrNkxxRVhBTUFacHFjVFlsWTJ5b3I1RGppeUlfYjFneTluRE90Q0IxeUdZbm1fNFdHNFVrMjRGQXI3QXhUT0ZmUU1laWdrUnhPVExaTnJMeEN2Vl9RIiwNCgkib3JpZ2luIiA6ICJodHRwczovL3dlYmF1dGhuLm9yZyIsDQoJInRva2VuQmluZGluZyIgOiANCgl7DQoJCSJzdGF0dXMiIDogInN1cHBvcnRlZCINCgl9DQp9",
+            "attestationObject": "o2NmbXRjdHBtaGF1dGhEYXRhWQFnlWkIjx7O4yMpVANdvRDXyuORMFonUbVZu4_Xy7IpvdRFAAAAAAiYcFjK3EuBtuEw3lDcvpYAIIVs3RYj2zjEOSjQbDIbPmXofBdIkx6x-t2CpK8SRYI0pAEDAzkBACBZAQDF2m9Nk1e94gL1xVjNCjFW0lTy4K2atXkx-YJrdH3hrE8p1gcIdNzleRDhmERJnY5CRwM5sXDQIrUBq4jpwvTtMC5HGccN6-iEJAPtm9_CJzCmGhtw9hbF8bcAys94RhN9xLLUaajhWqtPrYZXCEAi0o9E2QdTIxJrcAfJgZOf33JMr0--R1BAQxpOoGRDC8ss-tfQW9ufZLWw4JUuz4Z5Jz1sbfqBYB8UUDMWoT0HgsMaPmvd7T17xGvB-pvvDf-Dt96vFGtYLEZEgho8Yu26pr5CK_BOQ-2vX9N4MIYVPXNhogMGGmKYqybhM3yhye0GdBpZBUd5iOcgME6uGJ1_IUMBAAFnYXR0U3RtdKZjdmVyYzIuMGNhbGc5__5jc2lnWQEAcV1izWGUWIs0DEOZNQGdriNNXo6nbrGDLzEAeswCK9njYGCLmOkHVgSyafhsjCEMZkQmuPUmEOMDKosqxup_tiXQwG4yCW9TyWoINWGayQ4vcr6Ys-l6KMPkg__d2VywhfonnTJDBfE_4BIRD60GR0qBzTarthDHQFMqRtoUtuOsTF5jedU3EQPojRA5iCNC2naCCZuMSURdlPmhlW5rAaRZVF41ZZECi5iFOM2rO0UpGuQSLUvr1MqQOsDytMf7qWZMvwT_5_8BF6GNdB2l2VzmIJBbV6g8z7dj0fRkjlCXBp8UG2LvTq5SsfugrRWXOJ8BkdMplPfl0mz6ssU_n2N4NWOCWQS2MIIEsjCCA5qgAwIBAgIQEyidpWZzRxOSMNfrAvV1fzANBgkqhkiG9w0BAQsFADBBMT8wPQYDVQQDEzZOQ1UtTlRDLUtFWUlELTE1OTFENEI2RUFGOThEMDEwNDg2NEI2OTAzQTQ4REQwMDI2MDc3RDMwHhcNMTgwNTIwMTYyMDQ0WhcNMjgwNTIwMTYyMDQ0WjAAMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvQ6XK2ujM11E7x4SL34p252ncyQTd3-4r5ALQhBbFKS95gUsuENTG-48GBQwu48i06cckm3eH20TUeJvn4-pj6i8LFOrIK14T3P3GFzbxgQLq1KVm63JWDdEXk789JgzQjHNO7DZFKWTEiktwmBUPUA88TjQcXOtrR5EXTrt1FzGzabOepFann3Ny_XtxI8lDZ3QLwPLJfmk7puGtkGNaXOsRC7GLAnoEB7UWvjiyKG6HAtvVTgxcW5OQnHFb9AHycU5QdukXrP0njdCpLCRR0Nq6VMKmVU3MaGh-DCwYEB32sPNPdDkPDWyk16ItwcmXqfSBV5ZOr8ifvcXbCWUWwIDAQABo4IB5TCCAeEwDgYDVR0PAQH_BAQDAgeAMAwGA1UdEwEB_wQCMAAwbQYDVR0gAQH_BGMwYTBfBgkrBgEEAYI3FR8wUjBQBggrBgEFBQcCAjBEHkIAVABDAFAAQQAgACAAVAByAHUAcwB0AGUAZAAgACAAUABsAGEAdABmAG8AcgBtACAAIABJAGQAZQBuAHQAaQB0AHkwEAYDVR0lBAkwBwYFZ4EFCAMwSgYDVR0RAQH_BEAwPqQ8MDoxODAOBgVngQUCAwwFaWQ6MTMwEAYFZ4EFAgIMB05QQ1Q2eHgwFAYFZ4EFAgEMC2lkOjRFNTQ0MzAwMB8GA1UdIwQYMBaAFMISqVvO-lb4wMFvsVvdAzRHs3qjMB0GA1UdDgQWBBSv4kXTSA8i3NUM0q57lrWpM8p_4TCBswYIKwYBBQUHAQEEgaYwgaMwgaAGCCsGAQUFBzAChoGTaHR0cHM6Ly9hemNzcHJvZG5jdWFpa3B1Ymxpc2guYmxvYi5jb3JlLndpbmRvd3MubmV0L25jdS1udGMta2V5aWQtMTU5MWQ0YjZlYWY5OGQwMTA0ODY0YjY5MDNhNDhkZDAwMjYwNzdkMy8zYjkxOGFlNC0wN2UxLTQwNTktOTQ5MS0wYWQyNDgxOTA4MTguY2VyMA0GCSqGSIb3DQEBCwUAA4IBAQAs-vqdkDX09fNNYqzbv3Lh0vl6RgGpPGl-MYgO8Lg1I9UKvEUaaUHm845ABS8m7r9p22RCWO6TSEPS0YUYzAsNuiKiGVna4nB9JWZaV9GDS6aMD0nJ8kNciorDsV60j0Yb592kv1VkOKlbTF7-Z10jaapx0CqhxEIUzEBb8y9Pa8oOaQf8ORhDHZp-mbn_W8rUzXSDS0rFbWKaW4tGpVoKGRH-f9vIeXxGlxVS0wqqRm_r-h1aZInta0OOiL_S4367gZyeLL3eUnzdd-eYySYn2XINPbVacK8ZifdsLMwiNtz5uM1jbqpEn2UoB3Hcdn0hc12jTLPWFfg7GiKQ0hk9WQXsMIIF6DCCA9CgAwIBAgITMwAAAQDiBsSROVGXhwAAAAABADANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjE2MDQGA1UEAxMtTWljcm9zb2Z0IFRQTSBSb290IENlcnRpZmljYXRlIEF1dGhvcml0eSAyMDE0MB4XDTE3MDIwMTE3NDAyNFoXDTI5MTIzMTE3NDAyNFowQTE_MD0GA1UEAxM2TkNVLU5UQy1LRVlJRC0xNTkxRDRCNkVBRjk4RDAxMDQ4NjRCNjkwM0E0OEREMDAyNjA3N0QzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA9IwUMSiQUbrQR0NLkKR-9RB8zfHYdlmDB0XN_m8qrNHKRJ__lBOR-mwU_h3MFRZF6X3ZZwka1DtwBdzLFV8lVu33bc15stjSd6B22HRRKQ3sIns5AYQxg0eX2PtWCJuIhxdM_jDjP2hq9Yvx-ibt1IO9UZwj83NGxXc7Gk2UvCs9lcFSp6U8zzl5fGFCKYcxIKH0qbPrzjlyVyZTKwGGSTeoMMEdsZiq-m_xIcrehYuHg-FAVaPLLTblS1h5cu80-ruFUm5Xzl61YjVU9tAV_Y4joAsJ5QP3VPocFhr5YVsBVYBiBcQtr5JFdJXZWWEgYcFLdAFUk8nJERS7-5xLuQIDAQABo4IBizCCAYcwCwYDVR0PBAQDAgGGMBsGA1UdJQQUMBIGCSsGAQQBgjcVJAYFZ4EFCAMwFgYDVR0gBA8wDTALBgkrBgEEAYI3FR8wEgYDVR0TAQH_BAgwBgEB_wIBADAdBgNVHQ4EFgQUwhKpW876VvjAwW-xW90DNEezeqMwHwYDVR0jBBgwFoAUeowKzi9IYhfilNGuVcFS7HF0pFYwcAYDVR0fBGkwZzBloGOgYYZfaHR0cDovL3d3dy5taWNyb3NvZnQuY29tL3BraW9wcy9jcmwvTWljcm9zb2Z0JTIwVFBNJTIwUm9vdCUyMENlcnRpZmljYXRlJTIwQXV0aG9yaXR5JTIwMjAxNC5jcmwwfQYIKwYBBQUHAQEEcTBvMG0GCCsGAQUFBzAChmFodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpb3BzL2NlcnRzL01pY3Jvc29mdCUyMFRQTSUyMFJvb3QlMjBDZXJ0aWZpY2F0ZSUyMEF1dGhvcml0eSUyMDIwMTQuY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQAKc9z1UUBAaybIVnK8yL1N1iGJFFFFw_PpkxW76hgQhUcCxNFQskfahfFzkBD05odVC1DKyk2PyOle0G86FCmZiJa14MtKNsiu66nVqk2hr8iIcu-cYEsgb446yIGd1NblQKA1C_28F2KHm8YRgcFtRSkWEMuDiVMa0HDU8aI6ZHO04Naj86nXeULJSZsA0pQwNJ04-QJP3MFQzxQ7md6D-pCx-LVA-WUdGxT1ofaO5NFxq0XjubnZwRjQazy_m93dKWp19tbBzTUKImgUKLYGcdmVWXAxUrkxHN2FbZGOYWfmE2TGQXS2Z-g4YAQo1PleyOav3HNB8ti7u5HpI3t9a73xuECy2gFcZQ24DJuBaQe4mU5I_hPiAa-822nPPL6w8m1eegxhHf7ziRW_hW8s1cvAZZ5Jpev96zL_zRv34MsRWhKwLbu2oOCSEYYh8D8DbQZjmsxlUYR_q1cP8JKiIo6NNJ85g7sjTZgXxeanA9wZwqwJB-P98VdVslC17PmVu0RHOqRtxrht7OFT7Z10ecz0tj9ODXrv5nmBktmbgHRirRMl84wp7-PJhTXdHbxZv-OoL4HP6FxyDbHxLB7QmR4-VoEZN0vsybb1A8KEj2pkNY_tmxHH6k87euM99bB8FHrW9FNrXCGL1p6-PYtiky52a5YQZGT8Hz-ZnxobTmhjZXJ0SW5mb1ih_1RDR4AXACIAC7xZ9N_ZpqQtw7hmr_LfDRmCa78BS2erCtbrsXYwa4AHABSsnz8FacZi-wkUkfHu4xjG8MPfmwAAAAGxWkjHaED549jznwUBqeDEpT-7xBMAIgALcSGuv6a5r9BwMvQvCSXg7GdAjdWZpXv6D4DH8VYBCE8AIgALAVI0eQ_AAZjNvrhUEMK2q4wxuwIFOnHIDF0Qljhf47RncHViQXJlYVkBNgABAAsABgRyACCd_8vzbDg65pn7mGjcbcuJ1xU4hL4oA5IsEkFYv60irgAQABAIAAAAAAABAMXab02TV73iAvXFWM0KMVbSVPLgrZq1eTH5gmt0feGsTynWBwh03OV5EOGYREmdjkJHAzmxcNAitQGriOnC9O0wLkcZxw3r6IQkA-2b38InMKYaG3D2FsXxtwDKz3hGE33EstRpqOFaq0-thlcIQCLSj0TZB1MjEmtwB8mBk5_fckyvT75HUEBDGk6gZEMLyyz619Bb259ktbDglS7PhnknPWxt-oFgHxRQMxahPQeCwxo-a93tPXvEa8H6m-8N_4O33q8Ua1gsRkSCGjxi7bqmvkIr8E5D7a9f03gwhhU9c2GiAwYaYpirJuEzfKHJ7QZ0GlkFR3mI5yAwTq4YnX8"
         }
     };
+
 
     var assertionResponseMsgB64Url = {
         "rawId": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA-fPKUVYNGE2XYcjhihtYODQv-xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx-rbq_RMUbaJ-HoGVt-c820ifdoagkFR02Van8Vr9q67Bn6zHNDT_DNrQbtpIUqqX_Rg2p5o6F7bVO3uOJG9hUNgUb",
@@ -463,20 +435,6 @@
         }
     };
 
-    // var assertionResponseMsg = {
-    //     body: {
-    //         "binaryEncoding": "base64",
-    //         "rawId": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA+fPKUVYNGE2XYcjhihtYODQv+xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx+rbq/RMUbaJ+HoGVt+c820ifdoagkFR02Van8Vr9q67Bn6zHNDT/DNrQbtpIUqqX/Rg2p5o6F7bVO3uOJG9hUNgUb",
-    //         "id": "AAhH7cnPRBkcukjnc2G2GM1H5dkVs9P1q2VErhD57pkzKVjBbixdsufjXhUOfiD27D0VA+fPKUVYNGE2XYcjhihtYODQv+xEarplsa7Ix6hK13FA6uyRxMgHC3PhTbx+rbq/RMUbaJ+HoGVt+c820ifdoagkFR02Van8Vr9q67Bn6zHNDT/DNrQbtpIUqqX/Rg2p5o6F7bVO3uOJG9hUNgUb",
-    //         "response": {
-    //             "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJlYVR5VU5ueVBERGRLOFNORWdURVV2ejFROGR5bGtqalRpbVlkNVg3UUFvLUY4X1oxbHNKaTNCaWxVcEZaSGtJQ05EV1k4cjlpdm5UZ1c3LVhaQzNxUSIsImNsaWVudEV4dGVuc2lvbnMiOnt9LCJoYXNoQWxnb3JpdGhtIjoiU0hBLTI1NiIsIm9yaWdpbiI6Imh0dHBzOi8vbG9jYWxob3N0Ojg0NDMiLCJ0eXBlIjoid2ViYXV0aG4uZ2V0In0=",
-    //             "authenticatorData": "SZYN5YgOjGh0NBcPZHZgW4/krrmihjLHmVzzuoMdl2MBAAABaw==",
-    //             "signature": "MEYCIQD6dF3B0ZoaLA0r78oyRdoMNR0bN93Zi4cF/75hFAH6pQIhALY0UIsrh03u/f4yKOwzwD6Cj3/GWLJiioTT9580s1a7",
-    //             "userHandle": ""
-    //         }
-    //     }
-    // };
-
     var successServerResponse = {
         status: "ok",
         errorMessage: ""
@@ -488,18 +446,15 @@
     };
 
     var server = {
-        // challengeRequestMsg,
         creationOptionsRequest,
         basicCreationOptions,
         completeCreationOptions,
         getOptionsRequest,
         challengeResponseAttestationNoneMsgB64Url,
-        // challengeResponseAttestationNoneMsg,
         challengeResponseAttestationU2fMsgB64Url,
         challengeResponseAttestationU2fHypersecuB64UrlMsg,
         challengeResponseAttestationPackedB64UrlMsg,
         challengeResponseAttestationTpmB64UrlMsg,
-        // challengeResponseAttestationU2fMsg,
         basicGetOptions,
         completeGetOptions,
         assertionResponseMsgB64Url,
@@ -513,45 +468,6 @@
      * LIB PARAMS
      *********************************************************************************
      *********************************************************************************/
-
-    // var makeCredentialAttestationNoneResponse = {
-    //     username: challengeResponseAttestationNoneMsg.body.username,
-    //     rawId: b64decode(challengeResponseAttestationNoneMsg.body.id),
-    //     id: b64decode(challengeResponseAttestationNoneMsg.body.id),
-    //     response: {
-    //         attestationObject: b64decode(challengeResponseAttestationNoneMsg.body.response.attestationObject),
-    //         clientDataJSON: b64decode(challengeResponseAttestationNoneMsg.body.response.clientDataJSON)
-    //     }
-    // };
-
-    // var makeCredentialAttestationU2fResponse = {
-    //     username: challengeResponseAttestationU2fMsg.body.username,
-    //     rawId: b64decode(challengeResponseAttestationU2fMsg.body.id),
-    //     id: b64decode(challengeResponseAttestationU2fMsg.body.id),
-    //     response: {
-    //         attestationObject: b64decode(challengeResponseAttestationU2fMsg.body.response.attestationObject),
-    //         clientDataJSON: b64decode(challengeResponseAttestationU2fMsg.body.response.clientDataJSON)
-    //     }
-    // };
-
-    // var makeCredentialAttestationHypersecuU2fResponse = {
-    //     rawId: b64decode(challengeResponseAttestationU2fHypersecuB64UrlMsg.rawId),
-    //     response: {
-    //         attestationObject: b64decode(challengeResponseAttestationU2fHypersecuB64UrlMsg.response.attestationObject),
-    //         clientDataJSON: b64decode(challengeResponseAttestationU2fHypersecuB64UrlMsg.response.clientDataJSON)
-    //     }
-    // };
-
-    // var assertionResponse = {
-    //     rawId: b64decode(assertionResponseMsg.body.rawId),
-    //     id: b64decode(assertionResponseMsg.body.id),
-    //     response: {
-    //         clientDataJSON: b64decode(assertionResponseMsg.body.response.clientDataJSON),
-    //         authenticatorData: b64decode(assertionResponseMsg.body.response.authenticatorData),
-    //         signature: b64decode(assertionResponseMsg.body.response.signature),
-    //         userHandle: b64decode(assertionResponseMsg.body.response.userHandle)
-    //     }
-    // };
 
     var makeCredentialAttestationNoneResponse = {
         username: challengeResponseAttestationNoneMsgB64Url.username,
@@ -761,11 +677,90 @@
         0xE0, 0xE7, 0xF8, 0x90, 0xC0,
     ]).buffer;
 
+    var tpmAttestation = new Uint8Array([
+        0x30, 0x82, 0x04, 0xB2, 0x30, 0x82, 0x03, 0x9A, 0xA0, 0x03, 0x02, 0x01, 0x02, 0x02, 0x10, 0x13,
+        0x28, 0x9D, 0xA5, 0x66, 0x73, 0x47, 0x13, 0x92, 0x30, 0xD7, 0xEB, 0x02, 0xF5, 0x75, 0x7F, 0x30,
+        0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x0B, 0x05, 0x00, 0x30, 0x41,
+        0x31, 0x3F, 0x30, 0x3D, 0x06, 0x03, 0x55, 0x04, 0x03, 0x13, 0x36, 0x4E, 0x43, 0x55, 0x2D, 0x4E,
+        0x54, 0x43, 0x2D, 0x4B, 0x45, 0x59, 0x49, 0x44, 0x2D, 0x31, 0x35, 0x39, 0x31, 0x44, 0x34, 0x42,
+        0x36, 0x45, 0x41, 0x46, 0x39, 0x38, 0x44, 0x30, 0x31, 0x30, 0x34, 0x38, 0x36, 0x34, 0x42, 0x36,
+        0x39, 0x30, 0x33, 0x41, 0x34, 0x38, 0x44, 0x44, 0x30, 0x30, 0x32, 0x36, 0x30, 0x37, 0x37, 0x44,
+        0x33, 0x30, 0x1E, 0x17, 0x0D, 0x31, 0x38, 0x30, 0x35, 0x32, 0x30, 0x31, 0x36, 0x32, 0x30, 0x34,
+        0x34, 0x5A, 0x17, 0x0D, 0x32, 0x38, 0x30, 0x35, 0x32, 0x30, 0x31, 0x36, 0x32, 0x30, 0x34, 0x34,
+        0x5A, 0x30, 0x00, 0x30, 0x82, 0x01, 0x22, 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7,
+        0x0D, 0x01, 0x01, 0x01, 0x05, 0x00, 0x03, 0x82, 0x01, 0x0F, 0x00, 0x30, 0x82, 0x01, 0x0A, 0x02,
+        0x82, 0x01, 0x01, 0x00, 0xBD, 0x0E, 0x97, 0x2B, 0x6B, 0xA3, 0x33, 0x5D, 0x44, 0xEF, 0x1E, 0x12,
+        0x2F, 0x7E, 0x29, 0xDB, 0x9D, 0xA7, 0x73, 0x24, 0x13, 0x77, 0x7F, 0xB8, 0xAF, 0x90, 0x0B, 0x42,
+        0x10, 0x5B, 0x14, 0xA4, 0xBD, 0xE6, 0x05, 0x2C, 0xB8, 0x43, 0x53, 0x1B, 0xEE, 0x3C, 0x18, 0x14,
+        0x30, 0xBB, 0x8F, 0x22, 0xD3, 0xA7, 0x1C, 0x92, 0x6D, 0xDE, 0x1F, 0x6D, 0x13, 0x51, 0xE2, 0x6F,
+        0x9F, 0x8F, 0xA9, 0x8F, 0xA8, 0xBC, 0x2C, 0x53, 0xAB, 0x20, 0xAD, 0x78, 0x4F, 0x73, 0xF7, 0x18,
+        0x5C, 0xDB, 0xC6, 0x04, 0x0B, 0xAB, 0x52, 0x95, 0x9B, 0xAD, 0xC9, 0x58, 0x37, 0x44, 0x5E, 0x4E,
+        0xFC, 0xF4, 0x98, 0x33, 0x42, 0x31, 0xCD, 0x3B, 0xB0, 0xD9, 0x14, 0xA5, 0x93, 0x12, 0x29, 0x2D,
+        0xC2, 0x60, 0x54, 0x3D, 0x40, 0x3C, 0xF1, 0x38, 0xD0, 0x71, 0x73, 0xAD, 0xAD, 0x1E, 0x44, 0x5D,
+        0x3A, 0xED, 0xD4, 0x5C, 0xC6, 0xCD, 0xA6, 0xCE, 0x7A, 0x91, 0x5A, 0x9E, 0x7D, 0xCD, 0xCB, 0xF5,
+        0xED, 0xC4, 0x8F, 0x25, 0x0D, 0x9D, 0xD0, 0x2F, 0x03, 0xCB, 0x25, 0xF9, 0xA4, 0xEE, 0x9B, 0x86,
+        0xB6, 0x41, 0x8D, 0x69, 0x73, 0xAC, 0x44, 0x2E, 0xC6, 0x2C, 0x09, 0xE8, 0x10, 0x1E, 0xD4, 0x5A,
+        0xF8, 0xE2, 0xC8, 0xA1, 0xBA, 0x1C, 0x0B, 0x6F, 0x55, 0x38, 0x31, 0x71, 0x6E, 0x4E, 0x42, 0x71,
+        0xC5, 0x6F, 0xD0, 0x07, 0xC9, 0xC5, 0x39, 0x41, 0xDB, 0xA4, 0x5E, 0xB3, 0xF4, 0x9E, 0x37, 0x42,
+        0xA4, 0xB0, 0x91, 0x47, 0x43, 0x6A, 0xE9, 0x53, 0x0A, 0x99, 0x55, 0x37, 0x31, 0xA1, 0xA1, 0xF8,
+        0x30, 0xB0, 0x60, 0x40, 0x77, 0xDA, 0xC3, 0xCD, 0x3D, 0xD0, 0xE4, 0x3C, 0x35, 0xB2, 0x93, 0x5E,
+        0x88, 0xB7, 0x07, 0x26, 0x5E, 0xA7, 0xD2, 0x05, 0x5E, 0x59, 0x3A, 0xBF, 0x22, 0x7E, 0xF7, 0x17,
+        0x6C, 0x25, 0x94, 0x5B, 0x02, 0x03, 0x01, 0x00, 0x01, 0xA3, 0x82, 0x01, 0xE5, 0x30, 0x82, 0x01,
+        0xE1, 0x30, 0x0E, 0x06, 0x03, 0x55, 0x1D, 0x0F, 0x01, 0x01, 0xFF, 0x04, 0x04, 0x03, 0x02, 0x07,
+        0x80, 0x30, 0x0C, 0x06, 0x03, 0x55, 0x1D, 0x13, 0x01, 0x01, 0xFF, 0x04, 0x02, 0x30, 0x00, 0x30,
+        0x6D, 0x06, 0x03, 0x55, 0x1D, 0x20, 0x01, 0x01, 0xFF, 0x04, 0x63, 0x30, 0x61, 0x30, 0x5F, 0x06,
+        0x09, 0x2B, 0x06, 0x01, 0x04, 0x01, 0x82, 0x37, 0x15, 0x1F, 0x30, 0x52, 0x30, 0x50, 0x06, 0x08,
+        0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x02, 0x02, 0x30, 0x44, 0x1E, 0x42, 0x00, 0x54, 0x00, 0x43,
+        0x00, 0x50, 0x00, 0x41, 0x00, 0x20, 0x00, 0x20, 0x00, 0x54, 0x00, 0x72, 0x00, 0x75, 0x00, 0x73,
+        0x00, 0x74, 0x00, 0x65, 0x00, 0x64, 0x00, 0x20, 0x00, 0x20, 0x00, 0x50, 0x00, 0x6C, 0x00, 0x61,
+        0x00, 0x74, 0x00, 0x66, 0x00, 0x6F, 0x00, 0x72, 0x00, 0x6D, 0x00, 0x20, 0x00, 0x20, 0x00, 0x49,
+        0x00, 0x64, 0x00, 0x65, 0x00, 0x6E, 0x00, 0x74, 0x00, 0x69, 0x00, 0x74, 0x00, 0x79, 0x30, 0x10,
+        0x06, 0x03, 0x55, 0x1D, 0x25, 0x04, 0x09, 0x30, 0x07, 0x06, 0x05, 0x67, 0x81, 0x05, 0x08, 0x03,
+        0x30, 0x4A, 0x06, 0x03, 0x55, 0x1D, 0x11, 0x01, 0x01, 0xFF, 0x04, 0x40, 0x30, 0x3E, 0xA4, 0x3C,
+        0x30, 0x3A, 0x31, 0x38, 0x30, 0x0E, 0x06, 0x05, 0x67, 0x81, 0x05, 0x02, 0x03, 0x0C, 0x05, 0x69,
+        0x64, 0x3A, 0x31, 0x33, 0x30, 0x10, 0x06, 0x05, 0x67, 0x81, 0x05, 0x02, 0x02, 0x0C, 0x07, 0x4E,
+        0x50, 0x43, 0x54, 0x36, 0x78, 0x78, 0x30, 0x14, 0x06, 0x05, 0x67, 0x81, 0x05, 0x02, 0x01, 0x0C,
+        0x0B, 0x69, 0x64, 0x3A, 0x34, 0x45, 0x35, 0x34, 0x34, 0x33, 0x30, 0x30, 0x30, 0x1F, 0x06, 0x03,
+        0x55, 0x1D, 0x23, 0x04, 0x18, 0x30, 0x16, 0x80, 0x14, 0xC2, 0x12, 0xA9, 0x5B, 0xCE, 0xFA, 0x56,
+        0xF8, 0xC0, 0xC1, 0x6F, 0xB1, 0x5B, 0xDD, 0x03, 0x34, 0x47, 0xB3, 0x7A, 0xA3, 0x30, 0x1D, 0x06,
+        0x03, 0x55, 0x1D, 0x0E, 0x04, 0x16, 0x04, 0x14, 0xAF, 0xE2, 0x45, 0xD3, 0x48, 0x0F, 0x22, 0xDC,
+        0xD5, 0x0C, 0xD2, 0xAE, 0x7B, 0x96, 0xB5, 0xA9, 0x33, 0xCA, 0x7F, 0xE1, 0x30, 0x81, 0xB3, 0x06,
+        0x08, 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x01, 0x01, 0x04, 0x81, 0xA6, 0x30, 0x81, 0xA3, 0x30,
+        0x81, 0xA0, 0x06, 0x08, 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x02, 0x86, 0x81, 0x93, 0x68,
+        0x74, 0x74, 0x70, 0x73, 0x3A, 0x2F, 0x2F, 0x61, 0x7A, 0x63, 0x73, 0x70, 0x72, 0x6F, 0x64, 0x6E,
+        0x63, 0x75, 0x61, 0x69, 0x6B, 0x70, 0x75, 0x62, 0x6C, 0x69, 0x73, 0x68, 0x2E, 0x62, 0x6C, 0x6F,
+        0x62, 0x2E, 0x63, 0x6F, 0x72, 0x65, 0x2E, 0x77, 0x69, 0x6E, 0x64, 0x6F, 0x77, 0x73, 0x2E, 0x6E,
+        0x65, 0x74, 0x2F, 0x6E, 0x63, 0x75, 0x2D, 0x6E, 0x74, 0x63, 0x2D, 0x6B, 0x65, 0x79, 0x69, 0x64,
+        0x2D, 0x31, 0x35, 0x39, 0x31, 0x64, 0x34, 0x62, 0x36, 0x65, 0x61, 0x66, 0x39, 0x38, 0x64, 0x30,
+        0x31, 0x30, 0x34, 0x38, 0x36, 0x34, 0x62, 0x36, 0x39, 0x30, 0x33, 0x61, 0x34, 0x38, 0x64, 0x64,
+        0x30, 0x30, 0x32, 0x36, 0x30, 0x37, 0x37, 0x64, 0x33, 0x2F, 0x33, 0x62, 0x39, 0x31, 0x38, 0x61,
+        0x65, 0x34, 0x2D, 0x30, 0x37, 0x65, 0x31, 0x2D, 0x34, 0x30, 0x35, 0x39, 0x2D, 0x39, 0x34, 0x39,
+        0x31, 0x2D, 0x30, 0x61, 0x64, 0x32, 0x34, 0x38, 0x31, 0x39, 0x30, 0x38, 0x31, 0x38, 0x2E, 0x63,
+        0x65, 0x72, 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x0B, 0x05,
+        0x00, 0x03, 0x82, 0x01, 0x01, 0x00, 0x2C, 0xFA, 0xFA, 0x9D, 0x90, 0x35, 0xF4, 0xF5, 0xF3, 0x4D,
+        0x62, 0xAC, 0xDB, 0xBF, 0x72, 0xE1, 0xD2, 0xF9, 0x7A, 0x46, 0x01, 0xA9, 0x3C, 0x69, 0x7E, 0x31,
+        0x88, 0x0E, 0xF0, 0xB8, 0x35, 0x23, 0xD5, 0x0A, 0xBC, 0x45, 0x1A, 0x69, 0x41, 0xE6, 0xF3, 0x8E,
+        0x40, 0x05, 0x2F, 0x26, 0xEE, 0xBF, 0x69, 0xDB, 0x64, 0x42, 0x58, 0xEE, 0x93, 0x48, 0x43, 0xD2,
+        0xD1, 0x85, 0x18, 0xCC, 0x0B, 0x0D, 0xBA, 0x22, 0xA2, 0x19, 0x59, 0xDA, 0xE2, 0x70, 0x7D, 0x25,
+        0x66, 0x5A, 0x57, 0xD1, 0x83, 0x4B, 0xA6, 0x8C, 0x0F, 0x49, 0xC9, 0xF2, 0x43, 0x5C, 0x8A, 0x8A,
+        0xC3, 0xB1, 0x5E, 0xB4, 0x8F, 0x46, 0x1B, 0xE7, 0xDD, 0xA4, 0xBF, 0x55, 0x64, 0x38, 0xA9, 0x5B,
+        0x4C, 0x5E, 0xFE, 0x67, 0x5D, 0x23, 0x69, 0xAA, 0x71, 0xD0, 0x2A, 0xA1, 0xC4, 0x42, 0x14, 0xCC,
+        0x40, 0x5B, 0xF3, 0x2F, 0x4F, 0x6B, 0xCA, 0x0E, 0x69, 0x07, 0xFC, 0x39, 0x18, 0x43, 0x1D, 0x9A,
+        0x7E, 0x99, 0xB9, 0xFF, 0x5B, 0xCA, 0xD4, 0xCD, 0x74, 0x83, 0x4B, 0x4A, 0xC5, 0x6D, 0x62, 0x9A,
+        0x5B, 0x8B, 0x46, 0xA5, 0x5A, 0x0A, 0x19, 0x11, 0xFE, 0x7F, 0xDB, 0xC8, 0x79, 0x7C, 0x46, 0x97,
+        0x15, 0x52, 0xD3, 0x0A, 0xAA, 0x46, 0x6F, 0xEB, 0xFA, 0x1D, 0x5A, 0x64, 0x89, 0xED, 0x6B, 0x43,
+        0x8E, 0x88, 0xBF, 0xD2, 0xE3, 0x7E, 0xBB, 0x81, 0x9C, 0x9E, 0x2C, 0xBD, 0xDE, 0x52, 0x7C, 0xDD,
+        0x77, 0xE7, 0x98, 0xC9, 0x26, 0x27, 0xD9, 0x72, 0x0D, 0x3D, 0xB5, 0x5A, 0x70, 0xAF, 0x19, 0x89,
+        0xF7, 0x6C, 0x2C, 0xCC, 0x22, 0x36, 0xDC, 0xF9, 0xB8, 0xCD, 0x63, 0x6E, 0xAA, 0x44, 0x9F, 0x65,
+        0x28, 0x07, 0x71, 0xDC, 0x76, 0x7D, 0x21, 0x73, 0x5D, 0xA3, 0x4C, 0xB3, 0xD6, 0x15, 0xF8, 0x3B,
+        0x1A, 0x22, 0x90, 0xD2, 0x19, 0x3D
+    ]).buffer;
 
     var certs = {
         yubiKeyAttestation,
         yubicoRoot,
-        feitianFido2
+        feitianFido2,
+        tpmAttestation
     };
 
     /********************************************************************************
