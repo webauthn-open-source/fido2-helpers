@@ -435,6 +435,17 @@
         }
     };
 
+    var assertionResponseWindowsHelloMsgB64Url = {
+        "rawId": "AwVUFfSwuMV1DRHfYmNry1IUGW03wEw9aTAR7kJM1nw",
+        "id": "AwVUFfSwuMV1DRHfYmNry1IUGW03wEw9aTAR7kJM1nw",
+        "response": {
+            "clientDataJSON": "ew0KCSJ0eXBlIiA6ICJ3ZWJhdXRobi5nZXQiLA0KCSJjaGFsbGVuZ2UiIDogIm03WlUwWi1fSWl3dmlGbkYxSlhlSmpGaFZCaW5jVzY5RTFDdGo4QVEtWWJiMXVjNDFiTUh0SXRnNkpBQ2gxc09qX1pYam9udzJhY2pfSkQyaS1heEVRIiwNCgkib3JpZ2luIiA6ICJodHRwczovL3dlYmF1dGhuLm9yZyIsDQoJInRva2VuQmluZGluZyIgOiANCgl7DQoJCSJzdGF0dXMiIDogInN1cHBvcnRlZCINCgl9DQp9",
+            "authenticatorData": "lWkIjx7O4yMpVANdvRDXyuORMFonUbVZu4_Xy7IpvdQFAAAAAQ",
+            "signature": "ElyXBPkS6ps0aod8pSEwdbaeG04SUSoucEHaulPrK3eBk3R4aePjTB-SjiPbya5rxzbuUIYO0UnqkpZrb19ZywWqwQ7qVxZzxSq7BCZmJhcML7j54eK_2nszVwXXVgO7WxpBcy_JQMxjwjXw6wNAxmnJ-H3TJJO82x4-9pDkno-GjUH2ObYk9NtkgylyMcENUaPYqajSLX-q5k14T2g839UC3xzsg71xHXQSeHgzPt6f3TXpNxNNcBYJAMm8-exKsoMkxHPDLkzK1wd5giietdoT25XQ72i8fjSSL8eiS1gllEjwbqLJn5zMQbWlgpSzJy3lK634sdeZtmMpXbRtMA",
+            "userHandle": "YWs"
+        }
+    };
+
     var successServerResponse = {
         status: "ok",
         errorMessage: ""
@@ -521,10 +532,31 @@
         }
     };
 
+    var assertionResponseWindowsHello = {
+        rawId: b64decode(assertionResponseWindowsHelloMsgB64Url.rawId),
+        response: {
+            clientDataJSON: b64decode(assertionResponseWindowsHelloMsgB64Url.response.clientDataJSON),
+            authenticatorData: b64decode(assertionResponseWindowsHelloMsgB64Url.response.authenticatorData),
+            signature: b64decode(assertionResponseWindowsHelloMsgB64Url.response.signature),
+            userHandle: assertionResponseWindowsHelloMsgB64Url.response.userHandle
+        }
+    };
+
     var assnPublicKey =
         "-----BEGIN PUBLIC KEY-----\n" +
         "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERez9aO2wBAWO54MuGbEqSdWahSnG\n" +
         "MAg35BCNkaE3j8Q+O/ZhhKqTeIKm7El70EG6ejt4sg1ZaoQ5ELg8k3ywTg==\n" +
+        "-----END PUBLIC KEY-----\n";
+
+    var assnPublicKeyWindowsHello =
+        "-----BEGIN PUBLIC KEY-----\n" +
+        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2zT9pxqfMK3SNWvasEpd\n" +
+        "5/IcnjKGUJcUOGWjNJ3oszlvOlkpiWjCwYqnVH0Fy4ohm0rGzOOw4kyQh6i/X2qX\n" +
+        "dA0C2UNpuq29wpLBxl5ZiePVpnetJJVFRKiwA9WoDvlU3zX7QpFKzbEeRKSmI9r0\n" +
+        "gvJfCPOYWDhmiYxRZ4/u8hfSQ/Qg7NiV0K7jLv1m/2qtPEHVko7UGmXjWk0KANNe\n" +
+        "Xi2bwhQTU938I5aXtUQzDaURHbxCpmm86sKNgOWT1CVOGMuRqHBdyt5qKeu5N0DB\n" +
+        "aRFRRFVkcx6N0fU8y7DHXYnry0T+2Ln8rDZMZrfjQ/+b48CibGU9GwomshQE32pt\n" +
+        "/QIDAQAB\n" +
         "-----END PUBLIC KEY-----\n";
 
     var lib = {
@@ -534,7 +566,9 @@
         makeCredentialAttestationPackedResponse,
         makeCredentialAttestationTpmResponse,
         assertionResponse,
-        assnPublicKey
+        assertionResponseWindowsHello,
+        assnPublicKey,
+        assnPublicKeyWindowsHello,
     };
 
     /********************************************************************************
