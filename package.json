@@ -12,7 +12,7 @@
     "fido 2.0"
   ],
   "author": "Adam Powers",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/apowers313/fido2-helpers"
